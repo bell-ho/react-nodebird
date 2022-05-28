@@ -1,25 +1,21 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import useInput from '~/hook/useInput';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
 `;
 
+// eslint-disable-next-line react/prop-types
 const LoginForm = ({ setIsLoggedIn }) => {
   // 이런식으로 스타일 가능
   // const style = useMemo(() => ({ marginTop: 10 }), []);
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
 
-  const onChangeId = useCallback((e) => {
-    setId(e.target.value);
-  }, []);
-
-  const onChangePassword = useCallback((e) => {
-    setPassword(e.target.value);
-  });
+  const [id, onChangeId] = useInput('');
+  const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
     console.log(id, password);
@@ -60,6 +56,10 @@ const LoginForm = ({ setIsLoggedIn }) => {
       </ButtonWrapper>
     </FormWrapper>
   );
+};
+
+LoginForm.prototype = {
+  setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

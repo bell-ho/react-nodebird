@@ -13,7 +13,6 @@ import PostImages from '~/components/PostImages';
 import CommentForm from '~/components/CommentForm';
 import PostCardContent from '~/components/PostCardContent';
 
-// eslint-disable-next-line react/prop-types
 const PostCard = ({ post }) => {
   const [linked, setLinked] = useState(false);
   const [commentFormOpen, setCommentFormOpen] = useState(false);

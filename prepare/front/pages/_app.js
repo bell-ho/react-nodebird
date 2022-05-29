@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import Head from 'next/head';
 
+import wrapper from '~/store/configureStore';
+
 // eslint-disable-next-line react/prop-types
 const NodeBird = ({ Component }) => {
   return (
@@ -20,4 +22,4 @@ NodeBird.prototypes = {
   Component: PropTypes.elementType.isRequired,
 };
 
-export default NodeBird;
+export default wrapper.withRedux(NodeBird);

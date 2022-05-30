@@ -35,12 +35,21 @@ styled Global을 사용하여 전역 스타일을 변경할 수 있음
 ## 0530
 
 제네레이터 중단점이 있는 함수 function* , yield
+
 all : 한번에 다 실행
+
 fork : 함수를 실행
+
 call fork 차이점 : fork 비동기 호출 ,call 동기 호출
+
 put : 디스패치와 비슷
+
 yield : await 과 비슷
+
 take : 일회성 실행 이벤트 리스너 같은거 실행하고 없어짐 while(true) 와 조합하여 씀 ,while take 는 동기적으로 동작하지만 takeEvery 는 비동기로 동작한다
+
 takeEvery : take 의 일회성을 보완
+
 takeLatest : 가장 마지막것을 실행함 응답은 취소할 수 있지만 응답은 취소할 수 없다
+
 dispatch 실행시 해당 saga와 reducer가 거의 동시 실행된다. 그 후 차례대로 실행

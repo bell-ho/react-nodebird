@@ -53,3 +53,5 @@ takeEvery : take 의 일회성을 보완
 takeLatest : 가장 마지막것을 실행함 응답은 취소할 수 있지만 응답은 취소할 수 없다
 
 dispatch 실행시 해당 saga와 reducer가 거의 동시 실행된다. 그 후 차례대로 실행
+
+등록하는 페이지의 submit 을 누르면 게시글 등을 clear 하는 기능을 사용할 시 서버오류가 나도 clear 되기 때문에 useEffect를 통해 관리하는게 좋다

@@ -1,11 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import Head from 'next/head';
-
+import PropTypes from 'prop-types';
 import wrapper from '~/store/configureStore';
 
-// eslint-disable-next-line react/prop-types
 const NodeBird = ({ Component }) => {
   return (
     <>
@@ -18,7 +16,7 @@ const NodeBird = ({ Component }) => {
   );
 };
 
-NodeBird.prototypes = {
+NodeBird.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
 

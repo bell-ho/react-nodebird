@@ -18,22 +18,28 @@ const LoginForm = () => {
   // 이런식으로 스타일 가능
   // const style = useMemo(() => ({ marginTop: 10 }), []);
 
-  const { isLoggingIn } = useSelector((state) => state.user);
+  const { logInLoading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-  const [id, onChangeId] = useInput('');
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
-    dispatch(loginRequestAction({ id, password }));
-  }, [id, password]); // state는 넣어줘야함 변하는 것이여서 (빈 배열로 넣으면 마운트 시점에 id와 password가 없어서 같은걸로 쳐서 리랜더링이 안됨)
+    dispatch(loginRequestAction({ email, password }));
+  }, [email, password]); // state는 넣어줘야함 변하는 것이여서 (빈 배열로 넣으면 마운트 시점에 id와 password가 없어서 같은걸로 쳐서 리랜더링이 안됨)
 
   return (
     <FormWrapper onFinish={onSubmitForm}>
       <div>
-        <label htmlFor="user-id">아이디</label>
+        <label htmlFor="user-email">이메일</label>
         <br />
-        <Input name="user-id" value={id} onChange={onChangeId} required />
+        <Input
+          type="email"
+          name="user-email"
+          value={email}
+          onChange={onChangeEmail}
+          required
+        />
       </div>
       <div>
         <label htmlFor="user-password">비밀번호</label>
@@ -46,7 +52,7 @@ const LoginForm = () => {
         />
       </div>
       <ButtonWrapper>
-        <Button type="primary" htmlType="submit" loading={isLoggingIn}>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>
           로그인
         </Button>
         <Link href="/signup">

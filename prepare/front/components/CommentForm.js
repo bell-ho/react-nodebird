@@ -8,8 +8,16 @@ import useInput from '../hook/useInput';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { addCommentDone } = useSelector((state) => state.post);
+  const { addCommentDone, addCommentLoading } = useSelector(
+    (state) => state.post,
+  );
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
+
+  useEffect(() => {
+    if (addCommentDone) {
+      setCommentText('');
+    }
+  }, [addCommentDone]);
 
   const onSubmitComment = useCallback(() => {
     dispatch({
@@ -17,12 +25,6 @@ const CommentForm = ({ post }) => {
       data: { content: commentText, postId: post.id, userId: me.id },
     });
   }, [commentText, me.id]);
-
-  useEffect(() => {
-    if (addCommentDone) {
-      setCommentText('');
-    }
-  }, [addCommentDone]);
 
   return (
     <Form onFinish={onSubmitComment}>
@@ -35,7 +37,8 @@ const CommentForm = ({ post }) => {
         <Button
           type="primary"
           htmlType="submit"
-          style={{ position: 'absolute', right: 0, bottom: -40 }}
+          style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
+          loading={addCommentLoading}
         >
           삐약
         </Button>

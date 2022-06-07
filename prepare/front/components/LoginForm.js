@@ -21,8 +21,8 @@ const LoginForm = () => {
   const { logInLoading } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-  const [email, onChangeEmail] = useInput('');
-  const [password, onChangePassword] = useInput('');
+  const [email, onChangeEmail] = useInput('a@a.c');
+  const [password, onChangePassword] = useInput('a');
 
   const onSubmitForm = useCallback(() => {
     dispatch(loginRequestAction({ email, password }));
@@ -46,6 +46,7 @@ const LoginForm = () => {
         <br />
         <Input
           name="user-password"
+          type="password"
           value={password}
           onChange={onChangePassword}
           required

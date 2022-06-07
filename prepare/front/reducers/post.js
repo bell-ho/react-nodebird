@@ -1,4 +1,5 @@
 import shortId from 'shortId';
+import produce from 'immer';
 
 export const initialState = {
   mainPosts: [
@@ -40,14 +41,14 @@ export const initialState = {
         {
           id: shortId.generate(),
           user: {
-            id: shortId.generate(),
+            id: 1,
             nickname: '111',
           },
           content: '잘나오나',
         },
         {
           user: {
-            id: shortId.generate(),
+            id: 1,
             nickname: '2',
           },
           content: '잘나오나3333',
@@ -92,7 +93,7 @@ const dummyPost = (data) => ({
   id: data.id,
   content: data.content,
   user: {
-    id: 1,
+    id: shortId.generate(),
     nickname: 'bell-ho',
   },
   images: [],
@@ -102,85 +103,72 @@ const dummyComment = (data) => ({
   id: shortId.generate(),
   content: data,
   user: {
-    id: 1,
+    id: shortId.generate(),
     nickname: 'bell-ho',
   },
 });
 
 const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_POST_REQUEST:
-      return {
-        ...state,
-        addPostLoading: true,
-        addPostDone: false,
-        addPostError: null,
-      };
-    case ADD_POST_SUCCESS:
-      return {
-        ...state,
-        mainPosts: [dummyPost(action.data), ...state.mainPosts], // 앞에다 추가해야 가장 앞에 보임
-        addPostLoading: false,
-        addPostDone: true,
-      };
-    case ADD_POST_FAILURE:
-      return {
-        ...state,
-        addPostLoading: false,
-        addPostError: action.error,
-      };
-    case REMOVE_POST_REQUEST:
-      return {
-        ...state,
-        removePostLoading: true,
-        removePostDone: false,
-        removePostError: null,
-      };
-    case REMOVE_POST_SUCCESS:
-      return {
-        ...state,
-        mainPosts: state.mainPosts.filter((v) => v.id !== action.data),
-        removePostLoading: false,
-        removePostDone: true,
-      };
-    case REMOVE_POST_FAILURE:
-      return {
-        ...state,
-        removePostLoading: false,
-        removePostError: action.error,
-      };
-    case ADD_COMMENT_REQUEST:
-      return {
-        ...state,
-        addCommentLoading: true,
-        addCommentDone: false,
-        addCommentError: null,
-      };
-    case ADD_COMMENT_SUCCESS: {
-      const postIndex = state.mainPosts.findIndex(
-        (v) => v.id === action.data.postId,
-      );
-      const post = { ...state.mainPosts[postIndex] };
-      post.comments = [dummyComment(action.data.content), ...post.comments];
-      const mainPosts = [...state.mainPosts];
-      mainPosts[postIndex] = post;
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case ADD_POST_REQUEST:
+        draft.addPostLoading = true;
+        draft.addPostDone = false;
+        draft.addPostError = null;
+        break;
+      case ADD_POST_SUCCESS:
+        draft.addPostLoading = false;
+        draft.addPostDone = true;
+        draft.mainPosts = [dummyPost(action.data), ...state.mainPosts];
+        break;
+      case ADD_POST_FAILURE:
+        draft.addPostLoading = false;
+        draft.addPostError = action.error;
+        break;
+      case REMOVE_POST_REQUEST:
+        draft.removePostLoading = true;
+        draft.removePostDone = false;
+        draft.removePostError = null;
+        break;
+      case REMOVE_POST_SUCCESS:
+        draft.removePostLoading = false;
+        draft.removePostDon = true;
+        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+        break;
+      case REMOVE_POST_FAILURE:
+        draft.removePostLoading = false;
+        draft.removePostError = action.error;
+        break;
+      case ADD_COMMENT_REQUEST:
+        draft.addCommentLoading = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
+      case ADD_COMMENT_SUCCESS: {
+        // immer 적용전
+        // const postIndex = state.mainPosts.findIndex(
+        //   (v) => v.id === action.data.postId,
+        // ); // 해당 포스트 인덱스 찾고
+        // const post = { ...state.mainPosts[postIndex] }; // 해당 포스트 찾고
+        // post.comments = [dummyComment(action.data.content), ...post.comments]; // 해당 포스트의 코멘트에 새로운 코멘트를 더하고
+        // const mainPosts = [...state.mainPosts]; // 원래 포스트들을 가져오고
+        // mainPosts[postIndex] = post; // 원래 포스트에서 해당 포스트를 교체한다
 
-      return {
-        ...state,
-        mainPosts,
-        addCommentLoading: false,
-        addCommentDone: true,
-      };
+        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+        post.comments.unshift(dummyComment(action.data.content));
+        draft.addCommentLoading = false;
+        draft.addCommentDone = true;
+        break;
+      }
+      case ADD_COMMENT_FAILURE:
+        console.log(action);
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
+        break;
+      default:
+        break;
     }
-    case ADD_COMMENT_FAILURE:
-      return {
-        ...state,
-        addCommentLoading: false,
-        addCommentError: action.error,
-      };
-    default:
-      return state;
-  }
+  });
 };
 
 export default reducer;

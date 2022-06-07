@@ -1,10 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import AppLayout from '../components/AppLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import PostForm from '~/components/PostForm';
 import PostCard from '~/components/PostCard';
+import {
+  WindowScroller,
+  CellMeasurer,
+  CellMeasurerCache,
+  AutoSizer,
+  List,
+  ListRowProps,
+} from 'react-virtualized';
 import { LOAD_POSTS_REQUEST } from '~/reducers/post';
 
+const cache = new CellMeasurerCache({
+  defaultWidth: 100,
+  fixedWidth: true,
+});
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -35,12 +47,54 @@ const Home = () => {
     };
   }, [hasMorePost, loadPostsLoading]);
 
+  const rowRenderer = useCallback(
+    ({ index, key, parent, style }) => {
+      return (
+        <CellMeasurer
+          cache={cache}
+          parent={parent}
+          key={key}
+          columnIndex={0}
+          rowIndex={index}
+        >
+          <PostCard
+            key={mainPosts[index].id}
+            post={mainPosts[index]}
+            style={style}
+          />
+        </CellMeasurer>
+      );
+    },
+    [mainPosts],
+  );
+
   return (
     <AppLayout>
       {me && <PostForm />}
       {mainPosts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
+      {/*<WindowScroller>*/}
+      {/*  {({ height, scrollTop, isScrolling, onChildScroll }) => (*/}
+      {/*    <AutoSizer disableHeight>*/}
+      {/*      {({ width }) => (*/}
+      {/*        <List*/}
+      {/*          autoHeight*/}
+      {/*          height={height}*/}
+      {/*          width={width}*/}
+      {/*          isScrolling={isScrolling}*/}
+      {/*          overscanRowCount={0}*/}
+      {/*          onScroll={onChildScroll}*/}
+      {/*          scrollTop={scrollTop}*/}
+      {/*          rowCount={mainPosts.length}*/}
+      {/*          rowHeight={cache.rowHeight}*/}
+      {/*          rowRenderer={rowRenderer}*/}
+      {/*          deferredMeasurementCache={cache}*/}
+      {/*        />*/}
+      {/*      )}*/}
+      {/*    </AutoSizer>*/}
+      {/*  )}*/}
+      {/*</WindowScroller>*/}
     </AppLayout>
   );
 };

@@ -15,7 +15,6 @@ import PostCardContent from '~/components/PostCardContent';
 import { REMOVE_POST_REQUEST } from '~/reducers/post';
 import FollowButton from '~/components/FollowButton';
 
-FollowButton.propTypes = {};
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const [linked, setLinked] = useState(false);

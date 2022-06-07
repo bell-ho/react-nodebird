@@ -16,7 +16,7 @@ import { REMOVE_POST_REQUEST } from '~/reducers/post';
 import FollowButton from '~/components/FollowButton';
 
 FollowButton.propTypes = {};
-const PostCard = ({ post, key }) => {
+const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const [linked, setLinked] = useState(false);
   const [commentFormOpen, setCommentFormOpen] = useState(false);
@@ -80,7 +80,7 @@ const PostCard = ({ post, key }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        extra={me?.id && <FollowButton key={key} post={post} />}
+        extra={me?.id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.user.nickname[0]}</Avatar>}
@@ -113,7 +113,7 @@ const PostCard = ({ post, key }) => {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.string,
     user: PropTypes.object,
     content: PropTypes.string,
     createAt: PropTypes.object,

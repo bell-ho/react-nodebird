@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,25 +11,26 @@ const CommentForm = ({ post }) => {
   const { addCommentDone, addCommentLoading } = useSelector(
     (state) => state.post,
   );
+  const [loading, setLoading] = useState(false);
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
   useEffect(() => {
-    if (addCommentDone) {
+    if (!loading) {
       setCommentText('');
     }
-  }, [addCommentDone]);
+  }, [loading]);
 
   const onSubmitComment = useCallback(() => {
-    // dispatch({
-    //   type: ADD_COMMENT_REQUEST,
-    //   data: { content: commentText, postId: post.id, userId: me.id },
-    // });
+    setLoading(true);
     const params = {
       content: commentText,
       postId: post.id,
       userId: me.id,
     };
     dispatch(addComment(params));
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, [commentText, me.id]);
 
   return (
@@ -44,7 +45,7 @@ const CommentForm = ({ post }) => {
           type="primary"
           htmlType="submit"
           style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
-          loading={addCommentLoading}
+          loading={loading}
         >
           삐약
         </Button>

@@ -39,7 +39,7 @@ function* loadPosts(action) {
   } catch (e) {
     yield put({
       type: LOAD_POSTS_FAILURE,
-      data: e.response.data,
+      error: e.response.data,
     });
   }
 }
@@ -64,7 +64,7 @@ function* addPost(action) {
   } catch (e) {
     yield put({
       type: ADD_POST_FAILURE,
-      data: e.response.data,
+      error: e.response.data,
     });
   }
 }
@@ -85,7 +85,7 @@ function* removePost(action) {
   } catch (e) {
     yield put({
       type: REMOVE_POST_FAILURE,
-      data: e.response.data,
+      error: e.response.data,
     });
   }
 }
@@ -105,7 +105,7 @@ function* addComment(action) {
   } catch (e) {
     yield put({
       type: ADD_COMMENT_FAILURE,
-      data: e.response.data,
+      error: e.response.data,
     });
   }
 }

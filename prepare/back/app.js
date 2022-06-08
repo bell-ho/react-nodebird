@@ -1,23 +1,52 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const postRouter = require("./routes/post");
+const userRouter = require("./routes/user");
+const db = require("./models");
+const passportConfig = require("./passport");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const dotenv = require("dotenv");
+dotenv.config();
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log("db 연결");
+  })
+  .catch(console.error);
+passportConfig();
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+// req body를 가져오기 위한
+app.use(express.json()); // front 에서 json 형태로
+app.use(express.urlencoded({ extended: true })); // form submit 방식으로 할 때
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: process.env.COOKIE_SECRET,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   res.send("hello express");
 });
 
-app.get("/api/posts", (req, res) => {
-  res.json([
-    { id: 1, content: 2 },
-    { id: 1, content: 2 },
-    { id: 1, content: 2 },
-    { id: 1, content: 2 },
-  ]);
-});
+app.use("/users", userRouter);
+app.use("/posts", postRouter);
 
-app.post("/api/posts", (req, res) => {
-  res.json({ id: 1, content: 2 });
-});
+//error 미들웨어는 마지막에
+app.use((err, req, res, next) => {});
 
 app.listen(3065, () => {
-  console.log("서버 실행중");
+  console.log("서버 실행중!");
 });

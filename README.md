@@ -57,3 +57,9 @@ takeLatest : 가장 마지막것을 실행함 응답은 취소할 수 있지만 
 dispatch 실행시 해당 saga와 reducer가 거의 동시 실행된다. 그 후 차례대로 실행
 
 등록하는 페이지의 submit 을 누르면 게시글 등을 clear 하는 기능을 사용할 시 서버오류가 나도 clear 되기 때문에 useEffect를 통해 관리하는게 좋다
+
+## 0608
+
+node에서는 import를 쓰지 않고 require를 사용한다.=> front 환경에서는 웹팩이 알아서 import를 require로 바꿔주지만 node는 웹팩을 안쓰기 때문에 처음부터 require를 사용한다
+
+사용하는 라이브러리나 함수가 비동기인지 헷갈릴 땐 공식문서를 참고한다

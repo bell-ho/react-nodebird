@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Button, Form, Input } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -18,11 +18,17 @@ const LoginForm = () => {
   // 이런식으로 스타일 가능
   // const style = useMemo(() => ({ marginTop: 10 }), []);
 
-  const { logInLoading } = useSelector((state) => state.user);
+  const { logInLoading, logInError } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
 
   const dispatch = useDispatch();
-  const [email, onChangeEmail] = useInput('a@a.c');
-  const [password, onChangePassword] = useInput('a');
+  const [email, onChangeEmail] = useInput('jj@jj.jj');
+  const [password, onChangePassword] = useInput('jj');
 
   const onSubmitForm = useCallback(() => {
     dispatch(loginRequestAction({ email, password }));

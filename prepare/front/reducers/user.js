@@ -8,9 +8,9 @@ export const initialState = {
   unfollowLoading: false,
   unfollowDone: false,
   unfollowError: null,
-  loginLoading: false,
-  loginDone: false,
-  loginError: null,
+  logInLoading: false,
+  logInDone: false,
+  logInError: null,
   logOutLoading: false,
   logOutDone: false,
   logOutError: null,
@@ -110,23 +110,24 @@ const reducer = (state = initialState, action) => {
         draft.me.followings = draft.me.followings.filter(
           (v) => v.id !== action.data,
         );
+        break;
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
         draft.unfollowError = action.error;
         break;
       case LOG_IN_REQUEST:
-        draft.loginLoading = true;
-        draft.loginError = null;
-        draft.loginDone = false;
+        draft.logInLoading = true;
+        draft.logInError = null;
+        draft.logInDone = false;
         break;
       case LOG_IN_SUCCESS:
-        draft.loginLoading = false;
-        draft.loginDone = true;
-        draft.me = dummyUser(action.data);
+        draft.logInLoading = false;
+        draft.logInDone = true;
+        draft.me = action.data;
         break;
       case LOG_IN_FAILURE:
-        draft.loginLoading = false;
-        draft.loginError = action.error;
+        draft.logInLoading = false;
+        draft.logInError = action.error;
         break;
       case LOG_OUT_REQUEST:
         draft.logOutLoading = true;
@@ -135,12 +136,12 @@ const reducer = (state = initialState, action) => {
         break;
       case LOG_OUT_SUCCESS:
         draft.logOutLoading = false;
-        draft.loginDone = false;
+        draft.logInDone = false;
         draft.me = null;
         break;
       case LOG_OUT_FAILURE:
-        draft.loginLoading = false;
-        draft.loginError = action.error;
+        draft.logInLoading = false;
+        draft.logInError = action.error;
         break;
       case SIGN_UP_REQUEST:
         draft.signUpLoading = true;

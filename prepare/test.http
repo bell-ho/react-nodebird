@@ -1,0 +1,7 @@
+POST http://localhost:3065/api/posts
+Content-Type: application/json
+
+{
+  "id": 13,
+  "content": 3
+}

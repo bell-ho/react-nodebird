@@ -4,6 +4,7 @@ import {
   fork,
   put,
   takeLatest,
+  call,
   throttle,
 } from 'redux-saga/effects';
 import {
@@ -23,6 +24,7 @@ import {
 } from '~/reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '~/reducers/user';
 import shortId from 'shortId';
+import axios from 'axios';
 
 function loadPostsAPI() {
   // return axios.post('/api~');
@@ -44,23 +46,18 @@ function* loadPosts(action) {
   }
 }
 
-function addPostAPI() {
-  // return axios.post('/api~');
+function addPostAPI(data) {
+  return axios.post('/posts', { content: data });
 }
 
 function* addPost(action) {
   try {
-    // const result = yield call(addPostAPI, action.data);
-    yield delay(1000);
-    const id = shortId.generate();
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id: id,
-        content: action.data,
-      },
+      data: result.data,
     });
-    yield put({ type: ADD_POST_TO_ME, data: id });
+    yield put({ type: ADD_POST_TO_ME, data: result.data.id });
   } catch (e) {
     yield put({
       type: ADD_POST_FAILURE,
@@ -90,17 +87,16 @@ function* removePost(action) {
   }
 }
 
-function addCommentAPI() {
-  // return axios.post('/api~');
+function addCommentAPI(data) {
+  return axios.post(`/posts/${data.postId}/comment`, data);
 }
 
 function* addComment(action) {
   try {
-    // const result = yield call(addPostAPI, action.data);
-    yield delay(1000);
+    const result = yield call(addCommentAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (e) {
     yield put({

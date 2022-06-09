@@ -55,6 +55,25 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
+const dummyPost = (data) => ({
+  id: data.id,
+  content: data.content,
+  user: {
+    // id: shortId.generate(),
+    nickname: 'bell-ho',
+  },
+  images: [],
+  comments: [],
+});
+const dummyComment = (data) => ({
+  // id: shortId.generate(),
+  content: data,
+  user: {
+    // id: shortId.generate(),
+    nickname: 'bell-ho',
+  },
+});
+
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
   data,
@@ -62,25 +81,6 @@ export const addPost = (data) => ({
 export const addComment = (data) => ({
   type: ADD_COMMENT_REQUEST,
   data,
-});
-
-const dummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  user: {
-    id: shortId.generate(),
-    nickname: 'bell-ho',
-  },
-  images: [],
-  comments: [],
-});
-const dummyComment = (data) => ({
-  id: shortId.generate(),
-  content: data,
-  user: {
-    id: shortId.generate(),
-    nickname: 'bell-ho',
-  },
 });
 
 const reducer = (state = initialState, action) => {
@@ -109,7 +109,7 @@ const reducer = (state = initialState, action) => {
       case ADD_POST_SUCCESS:
         draft.addPostLoading = false;
         draft.addPostDone = true;
-        draft.mainPosts.unshift(dummyPost(action.data));
+        draft.mainPosts.unshift(action.data);
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
@@ -145,13 +145,12 @@ const reducer = (state = initialState, action) => {
         // mainPosts[postIndex] = post; // 원래 포스트에서 해당 포스트를 교체한다
 
         const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post.comments.unshift(dummyComment(action.data.content));
+        post.comments.unshift(action.data.content);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
       }
       case ADD_COMMENT_FAILURE:
-        console.log(action);
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
         break;

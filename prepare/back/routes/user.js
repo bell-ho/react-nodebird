@@ -45,7 +45,9 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
 //로그아웃
 router.post("/logout", isLoggedIn, (req, res, next) => {
   console.log(req.user);
-  req.logout();
+  req.logout(() => {
+    res.redirect("/");
+  });
   req.session.destroy();
   res.send("ok");
 });

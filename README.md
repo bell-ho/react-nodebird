@@ -63,3 +63,8 @@ dispatch 실행시 해당 saga와 reducer가 거의 동시 실행된다. 그 후
 node에서는 import를 쓰지 않고 require를 사용한다.=> front 환경에서는 웹팩이 알아서 import를 require로 바꿔주지만 node는 웹팩을 안쓰기 때문에 처음부터 require를 사용한다
 
 사용하는 라이브러리나 함수가 비동기인지 헷갈릴 땐 공식문서를 참고한다
+
+## 0610
+도메인이 다르면 쿠키도 전달이 안됨 => credentials로 해결
+credentials 가 true 일땐 민감한 정보가 오가는 거니까 origin을 특정해준다.
+

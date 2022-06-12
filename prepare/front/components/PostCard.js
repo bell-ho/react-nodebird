@@ -21,7 +21,7 @@ const PostCard = ({ post }) => {
   const [commentFormOpen, setCommentFormOpen] = useState(false);
 
   const { removePostLoading } = useSelector((state) => state.post);
-  const { me } = useSelector((state) => state.user);
+  const id = useSelector((state) => state.user.me?.id);
 
   const onToggleLike = useCallback(() => {
     setLinked((prev) => !prev);
@@ -30,14 +30,16 @@ const PostCard = ({ post }) => {
   const onToggleComment = useCallback(() => {
     setCommentFormOpen((prev) => !prev);
   }, []);
-  const id = me?.id;
 
   const onRemovePost = useCallback(() => {
+    if (!id) {
+      return alert('로그인이 필요합니다.');
+    }
     dispatch({
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
 
   return (
     <div style={{ marginBottom: 20 }}>
@@ -79,7 +81,7 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        extra={me?.id && <FollowButton post={post} />}
+        extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.user.nickname[0]}</Avatar>}
@@ -97,8 +99,8 @@ const PostCard = ({ post }) => {
             renderItem={(item) => (
               <li>
                 <Comment
-                  author={item.user.nickname}
-                  avatar={<Avatar>{item.user.nickname[0]}</Avatar>}
+                  // author={item.user.nickname}
+                  // avatar={<Avatar>{item.user.nickname[0]}</Avatar>}
                   content={item.content}
                 />
               </li>
@@ -115,7 +117,7 @@ PostCard.propTypes = {
     id: PropTypes.string,
     user: PropTypes.object,
     content: PropTypes.string,
-    createAt: PropTypes.object,
+    createAt: PropTypes.string,
     comments: PropTypes.arrayOf(PropTypes.object),
     images: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,

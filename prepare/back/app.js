@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const db = require("./models");
 const passportConfig = require("./passport");
@@ -9,6 +10,9 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
+
+const morgan = require("morgan");
+
 dotenv.config();
 db.sequelize
   .sync()
@@ -24,6 +28,8 @@ app.use(
     credentials: true,
   })
 );
+app.use(morgan("dev"));
+
 // req body를 가져오기 위한
 app.use(express.json()); // front 에서 json 형태로
 app.use(express.urlencoded({ extended: true })); // form submit 방식으로 할 때
@@ -42,12 +48,13 @@ app.get("/", (req, res) => {
   res.send("hello express");
 });
 
+app.use("/posts", postsRouter);
+app.use("/post", postRouter);
 app.use("/users", userRouter);
-app.use("/posts", postRouter);
 
 //error 미들웨어는 마지막에
 app.use((err, req, res, next) => {});
 
 app.listen(3065, () => {
-  console.log("서버 실행중!");
+  console.log("서버 실행 중");
 });

@@ -3,6 +3,9 @@ import {
   FOLLOW_FAILURE,
   FOLLOW_REQUEST,
   FOLLOW_SUCCESS,
+  LOAD_MY_INFO_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -18,6 +21,26 @@ import {
 } from '~/reducers/user';
 import axios from 'axios';
 
+function loadMyInfoAPI() {
+  return axios.get('/users');
+}
+
+function* loadMyInfo(action) {
+  try {
+    const result = yield call(loadMyInfoAPI, action.data);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function logInAPI(data) {
   return axios.post('/users/login', data);
 }
@@ -30,7 +53,7 @@ function* logIn(action) {
       data: result.data,
     });
   } catch (e) {
-    console.log(e.response.data);
+    console.error(e);
     yield put({
       type: LOG_IN_FAILURE,
       error: e.response.data,
@@ -49,7 +72,7 @@ function* logOut() {
       type: LOG_OUT_SUCCESS,
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     yield put({
       type: LOG_OUT_FAILURE,
       error: e.response.data,
@@ -69,6 +92,7 @@ function* signUp(action) {
       // data: result.data,
     });
   } catch (e) {
+    console.error(e);
     yield put({
       type: SIGN_UP_FAILURE,
       error: e.response.data,
@@ -89,6 +113,7 @@ function* follow(action) {
       data: action.data,
     });
   } catch (e) {
+    console.error(e);
     yield put({
       type: FOLLOW_FAILURE,
       error: e.response.data,
@@ -109,6 +134,7 @@ function* unfollow(action) {
       data: action.data,
     });
   } catch (e) {
+    console.error(e);
     yield put({
       type: UNFOLLOW_FAILURE,
       error: e.response.data,
@@ -136,9 +162,14 @@ function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchFollow),
+    fork(watchLoadMyInfo),
     fork(watchUnFollow),
     fork(watchLogin),
     fork(watchLogOut),

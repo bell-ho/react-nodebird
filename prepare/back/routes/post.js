@@ -6,6 +6,7 @@ const { isLoggedIn } = require("./middlewares");
 
 router.post("/", isLoggedIn, async (req, res, next) => {
   try {
+    console.log(req.body);
     const newPost = post.create({
       content: req.body.content,
       userId: req.user.id,
@@ -18,13 +19,20 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         },
         {
           model: comment,
+          include: [
+            {
+              model: user, //댓글 작성자
+              attributes: ["id", "nickname"],
+            },
+          ],
         },
         {
           model: user,
+          attributes: ["id", "nickname"],
         },
       ],
     });
-    res.status(201).json(newPost);
+    res.status(201).json(fullPost);
   } catch (e) {
     console.error(e);
     next(e);
@@ -41,9 +49,19 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     }
     const newComment = await comment.create({
       content: req.body.content,
-      postId: req.params.postId,
+      postId: parseInt(req.params.postId, 10),
+      userId: req.user.id,
     });
-    res.status(201).json(newComment);
+    const fullComment = await comment.findOne({
+      where: { id: newComment.id },
+      include: [
+        {
+          model: user,
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    res.status(201).json(fullComment);
   } catch (e) {
     console.error(e);
     next(e);

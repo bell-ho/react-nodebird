@@ -4,6 +4,40 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+
+router.get("/", async (req, res, next) => {
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: { exclude: ["password"] },
+        include: [
+          {
+            model: post,
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "followers",
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "followings",
+            attributes: ["id"],
+          },
+        ],
+      });
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 //로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -26,14 +60,17 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: post,
+            attributes: ["id"],
           },
           {
             model: User,
             as: "followers",
+            attributes: ["id"],
           },
           {
             model: User,
             as: "followings",
+            attributes: ["id"],
           },
         ],
       });

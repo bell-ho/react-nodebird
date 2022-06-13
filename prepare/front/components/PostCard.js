@@ -12,19 +12,25 @@ import PropTypes from 'prop-types';
 import PostImages from '~/components/PostImages';
 import CommentForm from '~/components/CommentForm';
 import PostCardContent from '~/components/PostCardContent';
-import { REMOVE_POST_REQUEST } from '~/reducers/post';
+import {
+  LIKE_POST_REQUEST,
+  REMOVE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+} from '~/reducers/post';
 import FollowButton from '~/components/FollowButton';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
-  const [linked, setLinked] = useState(false);
   const [commentFormOpen, setCommentFormOpen] = useState(false);
 
   const { removePostLoading } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
 
-  const onToggleLike = useCallback(() => {
-    setLinked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({ type: LIKE_POST_REQUEST, data: post.id });
+  }, []);
+  const onUnLike = useCallback(() => {
+    dispatch({ type: UNLIKE_POST_REQUEST, data: post.id });
   }, []);
 
   const onToggleComment = useCallback(() => {
@@ -41,6 +47,8 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
+  const linked = post.Likers.find((v) => v.id === id);
+
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
@@ -50,11 +58,11 @@ const PostCard = ({ post }) => {
           linked ? (
             <HeartTwoTone
               twoToneColor="#eb2f96"
-              onClick={onToggleLike}
+              onClick={onUnLike}
               key="heart"
             />
           ) : (
-            <HeartOutlined onClick={onToggleLike} key="heart" />
+            <HeartOutlined onClick={onLike} key="heart" />
           ),
           <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover

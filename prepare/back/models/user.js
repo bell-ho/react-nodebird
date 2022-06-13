@@ -1,40 +1,46 @@
-module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define(
-    "user",
-    {
-      email: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
-        unique: true,
+const DataTypes = require("sequelize");
+const { Model } = DataTypes;
+
+module.exports = class User extends Model {
+  static init(sequelize) {
+    return super.init(
+      {
+        email: {
+          type: DataTypes.STRING(30), // STRING, TEXT, BOOLEAN, INTEGER, FLOAT, DATETIME
+          allowNull: false, // 필수
+          unique: true, // 고유한 값
+        },
+        nickname: {
+          type: DataTypes.STRING(30),
+          allowNull: false, // 필수
+        },
+        password: {
+          type: DataTypes.STRING(100),
+          allowNull: false, // 필수
+        },
       },
-      nickname: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-    },
-    {
-      charset: "utf8",
-      collate: "utf8_general_ci",
-    }
-  );
-  user.associate = (db) => {
-    db.user.hasMany(db.post);
-    db.user.hasMany(db.comment);
-    db.user.belongsToMany(db.post, { through: "like", as: "liked" });
-    db.user.belongsToMany(db.user, {
-      through: "follow",
-      as: "followers",
-      foreignKey: "followingId",
+      {
+        modelName: "User",
+        tableName: "users",
+        charset: "utf8",
+        collate: "utf8_general_ci", // 한글 저장
+        sequelize,
+      }
+    );
+  }
+  static associate(db) {
+    db.User.hasMany(db.Post);
+    db.User.hasMany(db.Comment);
+    db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
+    db.User.belongsToMany(db.User, {
+      through: "Follow",
+      as: "Followers",
+      foreignKey: "FollowingId",
     });
-    db.user.belongsToMany(db.user, {
-      through: "follow",
-      as: "followings",
-      foreignKey: "followerId",
+    db.User.belongsToMany(db.User, {
+      through: "Follow",
+      as: "Followings",
+      foreignKey: "FollowerId",
     });
-  };
-  return user;
+  }
 };

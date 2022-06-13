@@ -22,7 +22,7 @@ import {
 import axios from 'axios';
 
 function loadMyInfoAPI() {
-  return axios.get('/users');
+  return axios.get('/user');
 }
 
 function* loadMyInfo(action) {
@@ -42,7 +42,7 @@ function* loadMyInfo(action) {
 }
 
 function logInAPI(data) {
-  return axios.post('/users/login', data);
+  return axios.post('/user/login', data);
 }
 
 function* logIn(action) {
@@ -62,7 +62,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post('/users/logout');
+  return axios.post('/user/logout');
 }
 
 function* logOut() {
@@ -81,7 +81,7 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post('/users', data);
+  return axios.post('/user', data);
 }
 
 function* signUp(action) {

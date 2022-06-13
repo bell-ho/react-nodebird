@@ -1,35 +1,40 @@
 const express = require("express");
-const { post, user, image, comment } = require("../models");
+const { Post, Image, User, Comment } = require("../models");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const posts = await post.findAll({
+    const where = {};
+    const posts = await Post.findAll({
+      where,
       limit: 10,
       order: [
         ["createdAt", "DESC"],
-        [comment, "createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
       ],
       include: [
-        { model: user, attributes: ["id", "nickname"] },
-        { model: image },
         {
-          model: comment,
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
           include: [
             {
-              model: user, //
+              model: User,
               attributes: ["id", "nickname"],
             },
           ],
         },
       ],
     });
-    console.log(posts);
     res.status(200).json(posts);
-  } catch (e) {
-    console.error(e);
-    next(e);
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 });
-
 module.exports = router;

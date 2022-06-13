@@ -1,5 +1,4 @@
 import producer from 'immer';
-import shortId from 'shortid';
 
 export const initialState = {
   loadMyInfoLoading: false,
@@ -62,14 +61,14 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 const dummyUser = (data) => ({
   ...data,
   nickname: 'bell-ho',
-  id: shortId.generate(),
-  posts: [{ id: shortId.generate() }],
+  // id: shortId.generate(),
+  // Posts: [{ id: shortId.generate() }],
   followings: [
     { name: '1', nickname: '22' },
     { name: '1', nickname: '22' },
     { name: '1', nickname: '22' },
   ],
-  followers: [
+  Followers: [
     { name: '1', nickname: '22' },
     { name: '1', nickname: '22' },
     { name: '1', nickname: '22' },
@@ -114,7 +113,7 @@ const reducer = (state = initialState, action) => {
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.followings.push({ id: action.data });
+        draft.me.Followings.push({ id: action.data });
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
@@ -128,7 +127,7 @@ const reducer = (state = initialState, action) => {
       case UNFOLLOW_SUCCESS:
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
-        draft.me.followings = draft.me.followings.filter(
+        draft.me.Followings = draft.me.Followings.filter(
           (v) => v.id !== action.data,
         );
         break;
@@ -196,7 +195,7 @@ const reducer = (state = initialState, action) => {
         //   posts: [{ id: action.data }, ...state.me.posts],
         // },
 
-        draft.me.posts.unshift({ id: action.data });
+        draft.me.Posts.unshift({ id: action.data });
         break;
       case REMOVE_POST_OF_ME:
         // return {
@@ -207,7 +206,7 @@ const reducer = (state = initialState, action) => {
         //   },
         // };
 
-        draft.me.posts.filter((v) => v.id !== action.data);
+        draft.me.Posts.filter((v) => v.id !== action.data);
         break;
       default:
         break;

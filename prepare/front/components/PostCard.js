@@ -44,7 +44,7 @@ const PostCard = ({ post }) => {
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
-        cover={post.images[0] && <PostImages images={post.images} />}
+        cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
           linked ? (
@@ -61,7 +61,7 @@ const PostCard = ({ post }) => {
             key="more"
             content={
               <Button.Group>
-                {id && post.user.id === id ? (
+                {id && post.User.id === id ? (
                   <>
                     <Button>수정</Button>
                     <Button
@@ -84,8 +84,8 @@ const PostCard = ({ post }) => {
         extra={id && <FollowButton post={post} />}
       >
         <Card.Meta
-          avatar={<Avatar>{post.user.nickname[0]}</Avatar>}
-          title={post.user.nickname}
+          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+          title={post.User.nickname}
           description={<PostCardContent postData={post.content} />}
         />
       </Card>
@@ -93,18 +93,20 @@ const PostCard = ({ post }) => {
         <div>
           <CommentForm post={post} />
           <List
-            header={`${post.comments.length}개의 댓글`}
+            header={`${post.Comments.length}개의 댓글`}
             itemLayout="horizontal"
-            dataSource={post.comments}
-            renderItem={(item) => (
-              <li>
-                <Comment
-                  // author={item.user.nickname}
-                  // avatar={<Avatar>{item.user.nickname[0]}</Avatar>}
-                  content={item.content}
-                />
-              </li>
-            )}
+            dataSource={post?.Comments}
+            renderItem={(item) => {
+              return (
+                <li>
+                  <Comment
+                    author={item?.User?.nickname}
+                    avatar={<Avatar>{item?.User?.nickname[0]}</Avatar>}
+                    content={item.content}
+                  />
+                </li>
+              );
+            }}
           />
         </div>
       )}
@@ -114,12 +116,15 @@ const PostCard = ({ post }) => {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
-    id: PropTypes.string,
-    user: PropTypes.object,
+    id: PropTypes.number,
+    User: PropTypes.object,
     content: PropTypes.string,
-    createAt: PropTypes.string,
-    comments: PropTypes.arrayOf(PropTypes.object),
-    images: PropTypes.arrayOf(PropTypes.object),
+    createdAt: PropTypes.string,
+    Comments: PropTypes.arrayOf(PropTypes.object),
+    Images: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
+    RetweetId: PropTypes.number,
+    Retweet: PropTypes.objectOf(PropTypes.any),
   }).isRequired,
 };
 

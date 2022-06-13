@@ -50,7 +50,7 @@ app.get("/", (req, res) => {
 
 app.use("/posts", postsRouter);
 app.use("/post", postRouter);
-app.use("/users", userRouter);
+app.use("/user", userRouter);
 
 //error 미들웨어는 마지막에
 app.use((err, req, res, next) => {});

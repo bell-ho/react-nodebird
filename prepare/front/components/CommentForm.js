@@ -22,16 +22,14 @@ const CommentForm = ({ post }) => {
 
   const onSubmitComment = useCallback(() => {
     setLoading(true);
-    const params = {
-      content: commentText,
-      postId: post.id,
-      userId: me.id,
-    };
-    dispatch(addComment(params));
+    dispatch({
+      type: ADD_COMMENT_REQUEST,
+      data: { content: commentText, postId: post.id, userId: me?.id },
+    });
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, [commentText, me.id]);
+  }, [commentText, me?.id]);
 
   return (
     <Form onFinish={onSubmitComment}>

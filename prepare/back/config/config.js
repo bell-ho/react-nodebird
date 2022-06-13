@@ -4,27 +4,24 @@ dotenv.config();
 
 module.exports = {
   development: {
-    username: "root",
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: "react-nodebird",
-    host: "localhost",
-    port: 3300,
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
     dialect: "mysql",
   },
   test: {
-    username: "root",
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: "react-nodebird",
-    host: "localhost",
-    port: 3300,
+    database: process.env.DB_HOST,
+    host: process.env.DB_HOST,
     dialect: "mysql",
   },
   production: {
-    username: "root",
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    database: "react-nodebird",
-    host: "localhost",
-    port: 3300,
+    database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
     dialect: "mysql",
   },
 };

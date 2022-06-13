@@ -1,4 +1,3 @@
-import shortId from 'shortId';
 import produce from 'immer';
 import faker from 'faker';
 
@@ -24,14 +23,14 @@ export const generateDummyPost = (number) =>
   Array(20)
     .fill()
     .map(() => ({
-      id: shortId.generate(),
-      images: [{ src: faker.image.image() }],
-      user: { id: shortId.generate(), nickname: faker.name.findName() },
+      // id: shortId.generate(),
+      Images: [{ src: faker.image.image() }],
+      // User: { id: shortId.generate(), nickname: faker.name.findName() },
       content: faker.lorem.paragraph(),
-      comments: [
+      Comments: [
         {
-          user: {
-            id: shortId.generate(),
+          User: {
+            // id: shortId.generate(),
             nickname: faker.name.findName(),
           },
           content: faker.lorem.sentence(),
@@ -58,17 +57,17 @@ export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 const dummyPost = (data) => ({
   id: data.id,
   content: data.content,
-  user: {
+  User: {
     // id: shortId.generate(),
     nickname: 'bell-ho',
   },
-  images: [],
-  comments: [],
+  Images: [],
+  Comments: [],
 });
 const dummyComment = (data) => ({
   // id: shortId.generate(),
   content: data,
-  user: {
+  User: {
     // id: shortId.generate(),
     nickname: 'bell-ho',
   },
@@ -144,8 +143,8 @@ const reducer = (state = initialState, action) => {
         // const mainPosts = [...state.mainPosts]; // 원래 포스트들을 가져오고
         // mainPosts[postIndex] = post; // 원래 포스트에서 해당 포스트를 교체한다
 
-        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-        post.comments.unshift(action.data.content);
+        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        post.Comments.unshift(action.data);
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;

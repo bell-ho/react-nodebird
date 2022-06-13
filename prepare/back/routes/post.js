@@ -6,11 +6,11 @@ const { isLoggedIn } = require("./middlewares");
 
 router.post("/", isLoggedIn, async (req, res, next) => {
   try {
-    console.log(req.body);
     const newPost = post.create({
       content: req.body.content,
       userId: req.user.id,
     });
+    console.log(newPost);
     const fullPost = await post.findOne({
       where: { id: newPost.id },
       include: [
@@ -22,13 +22,13 @@ router.post("/", isLoggedIn, async (req, res, next) => {
           include: [
             {
               model: user, //댓글 작성자
-              attributes: ["id", "nickname"],
+              // attributes: ["id", "nickname"],
             },
           ],
         },
         {
           model: user,
-          attributes: ["id", "nickname"],
+          // attributes: ["id", "nickname"],
         },
       ],
     });

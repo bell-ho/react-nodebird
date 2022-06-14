@@ -140,5 +140,3 @@ react-nodebird-aws.pem
 node_modules
 .env
 .next
-prepare/back/package-lock.json
-prepare/front/package-lock.json

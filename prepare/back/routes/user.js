@@ -43,54 +43,61 @@ router.get("/", async (req, res, next) => {
 
 //로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      console.error(err);
-      return next(err);
-    }
-    if (info) {
-      return res.status(401).send(info.reason);
-    }
-    return req.login(user, async (loginErr) => {
-      if (loginErr) {
-        console.error(loginErr);
-        return next(loginErr);
+  try {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        console.error(err);
+        return next(err);
       }
-      const fullUserWithoutPassword = await User.findOne({
-        where: { id: user.id },
-        attributes: {
-          exclude: ["password"],
-        },
-        include: [
-          {
-            model: Post,
-            attributes: ["id"],
+      if (info) {
+        return res.status(401).send(info.reason);
+      }
+      return req.login(user, async (loginErr) => {
+        if (loginErr) {
+          console.error(loginErr);
+          return next(loginErr);
+        }
+        const fullUserWithoutPassword = await User.findOne({
+          where: { id: user.id },
+          attributes: {
+            exclude: ["password"],
           },
-          {
-            model: User,
-            as: "Followings",
-            attributes: ["id"],
-          },
-          {
-            model: User,
-            as: "Followers",
-            attributes: ["id"],
-          },
-        ],
+          include: [
+            {
+              model: Post,
+              attributes: ["id"],
+            },
+            {
+              model: User,
+              as: "Followings",
+              attributes: ["id"],
+            },
+            {
+              model: User,
+              as: "Followers",
+              attributes: ["id"],
+            },
+          ],
+        });
+        return res.status(200).json(fullUserWithoutPassword);
       });
-      return res.status(200).json(fullUserWithoutPassword);
-    });
-  })(req, res, next);
+    })(req, res, next);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 });
 
 //로그아웃
 router.post("/logout", isLoggedIn, (req, res, next) => {
-  console.log(req.user);
-  req.logout(() => {
-    res.redirect("/");
-  });
-  req.session.destroy();
-  res.send("ok");
+  try {
+    req.logout();
+    req.session.destroy();
+    res.send("ok");
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 });
 
 // 회원가입
@@ -115,6 +122,21 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
   } catch (error) {
     console.error(error);
     next(error); // status 500
+  }
+});
+
+router.patch("/nickname", isLoggedIn, async (req, res, next) => {
+  try {
+    await User.update(
+      {
+        nickname: req.body.nickname,
+      },
+      { where: { id: req.user.id } }
+    );
+    res.status(200).json({ nickname: req.body.nickname });
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 });
 

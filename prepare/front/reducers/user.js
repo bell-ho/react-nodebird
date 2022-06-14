@@ -62,7 +62,7 @@ const dummyUser = (data) => ({
   ...data,
   nickname: 'bell-ho',
   // id: shortId.generate(),
-  // Posts: [{ id: shortId.generate() }],
+  Posts: [{ id: 1 }],
   followings: [
     { name: '1', nickname: '22' },
     { name: '1', nickname: '22' },
@@ -182,6 +182,7 @@ const reducer = (state = initialState, action) => {
         draft.changeNicknameError = null;
         break;
       case CHANGE_NICKNAME_SUCCESS:
+        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
         break;
@@ -206,7 +207,7 @@ const reducer = (state = initialState, action) => {
         //   },
         // };
 
-        draft.me.Posts.filter((v) => v.id !== action.data);
+        draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
         break;
       default:
         break;

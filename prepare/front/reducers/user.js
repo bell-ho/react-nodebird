@@ -4,25 +4,33 @@ export const initialState = {
   loadMyInfoLoading: false,
   loadMyInfoDone: false,
   loadMyInfoError: null,
+
   followLoading: false,
   followDone: false,
   followError: null,
+
   unfollowLoading: false,
   unfollowDone: false,
   unfollowError: null,
+
   logInLoading: false,
   logInDone: false,
   logInError: null,
+
   logOutLoading: false,
   logOutDone: false,
   logOutError: null,
+
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
+
   changeNicknameLoading: false, // 닉네임 변경 시도중
   changeNicknameDone: false,
   changeNicknameError: null,
+
   me: null,
+
   signUpData: {},
   loginData: {},
 };
@@ -60,8 +68,7 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 const dummyUser = (data) => ({
   ...data,
-  nickname: 'bell-ho',
-  // id: shortId.generate(),
+  nickname: 'bell-ho', // id: shortId.generate(),
   // Posts: [{ id: shortId.generate() }],
   followings: [
     { name: '1', nickname: '22' },

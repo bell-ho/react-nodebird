@@ -4,25 +4,33 @@ export const initialState = {
   loadMyInfoLoading: false,
   loadMyInfoDone: false,
   loadMyInfoError: null,
+
   followLoading: false,
   followDone: false,
   followError: null,
+
   unfollowLoading: false,
   unfollowDone: false,
   unfollowError: null,
+
   logInLoading: false,
   logInDone: false,
   logInError: null,
+
   logOutLoading: false,
   logOutDone: false,
   logOutError: null,
+
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
+
   changeNicknameLoading: false, // 닉네임 변경 시도중
   changeNicknameDone: false,
   changeNicknameError: null,
+
   me: null,
+
   signUpData: {},
   loginData: {},
 };
@@ -182,7 +190,6 @@ const reducer = (state = initialState, action) => {
         draft.changeNicknameError = null;
         break;
       case CHANGE_NICKNAME_SUCCESS:
-        draft.me.nickname = action.data.nickname;
         draft.changeNicknameLoading = false;
         draft.changeNicknameDone = true;
         break;

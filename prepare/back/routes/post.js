@@ -1,15 +1,52 @@
 const express = require("express");
-
+const path = require("path");
 const router = express.Router();
 const { Post, Image, Comment, User, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
+const multer = require("multer");
+const fs = require("fs");
 
-router.post("/", isLoggedIn, async (req, res, next) => {
+try {
+  fs.accessSync("uploads");
+} catch (e) {
+  console.log("업로드 폴더가 없어서 생성됨");
+  fs.mkdirSync("uploads");
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, "uploads");
+    },
+    filename(req, file, done) {
+      // ex) testFile.png
+      const ext = path.extname(file.originalname); //확장자 추출 => .png
+      const basename = path.basename(file.originalname, ext); // testFile
+      done(null, basename + "_" + new Date().getTime() + ext); // 시간초를 파일이름에 더해줌
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 용량제한 20MB
+});
+
+router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (req.body.image) {
+      //db엔 파일의 주소만 갖고있는다 => 파일자체를 가지고있으면 db가 너무 무거워짐, 캐싱도 안됨 => 파일자체는 S3 클라우드에 올려서 CDN 캐싱을 적용하고 => 디비엔 파일을 접근할 수 있는 주소만 저장함
+      if (Array.isArray(req.body.image)) {
+        const images = await Promise.all(
+          req.body.image.map((image) => Image.create({ src: image }))
+        );
+        console.log(images);
+        await post.addImages(images);
+      } else {
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
@@ -110,6 +147,15 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
       where: { id: req.params.postId, UserId: req.user.id },
     });
     res.json({ PostId: parseInt(req.params.postId, 10) });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.post(`/images`, isLoggedIn, upload.array("image"), (req, res, next) => {
+  try {
+    res.json(req.files.map((v) => v.filename));
   } catch (e) {
     console.error(e);
     next(e);

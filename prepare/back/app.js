@@ -10,7 +10,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const dotenv = require("dotenv");
-
+const path = require("path");
 const morgan = require("morgan");
 
 dotenv.config();
@@ -29,6 +29,8 @@ app.use(
   })
 );
 app.use(morgan("dev"));
+
+app.use("/", express.static(path.join(__dirname, "uploads")));
 
 // req body를 가져오기 위한
 app.use(express.json()); // front 에서 json 형태로

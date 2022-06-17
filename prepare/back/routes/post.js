@@ -30,17 +30,25 @@ const upload = multer({
 
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({ where: { name: tag.slice(1).toLowerCase() } })
+        )
+      );
+      await post.addHashtags(result.map((v) => v[0]));
+    }
     if (req.body.image) {
       //db엔 파일의 주소만 갖고있는다 => 파일자체를 가지고있으면 db가 너무 무거워짐, 캐싱도 안됨 => 파일자체는 S3 클라우드에 올려서 CDN 캐싱을 적용하고 => 디비엔 파일을 접근할 수 있는 주소만 저장함
       if (Array.isArray(req.body.image)) {
         const images = await Promise.all(
           req.body.image.map((image) => Image.create({ src: image }))
         );
-        console.log(images);
         await post.addImages(images);
       } else {
         const image = await Image.create({ src: req.body.image });

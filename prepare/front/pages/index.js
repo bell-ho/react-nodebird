@@ -7,6 +7,8 @@ import { LOAD_POSTS_REQUEST } from '~/reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '~/reducers/user';
 import wrapper from '~/store/configureStore';
 import { END } from 'redux-saga';
+import axios from 'axios';
+
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -19,14 +21,6 @@ const Home = () => {
       alert(retweetError);
     }
   }, [retweetError]);
-
-  // useEffect(() => {
-  //   dispatch({
-  //     type: LOAD_MY_INFO_REQUEST,
-  //   });
-  //
-  //   dispatch({ type: LOAD_POSTS_REQUEST });
-  // }, []);
 
   useEffect(() => {
     function onScroll() {
@@ -57,9 +51,20 @@ const Home = () => {
   );
 };
 
+// 온전히 프론트 서버에서 실행됨
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {
     //context 안에 store가 있음
+
+    const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+
+    //다른 사람과 쿠키 공유 문제 해결
+    if (context.req && cookie) {
+      // 프론트 서버일때와 쿠키가 있을때만 쿠키를 넣는다
+      axios.defaults.headers.Cookie = cookie;
+    }
+
     context.store.dispatch({
       type: LOAD_MY_INFO_REQUEST,
     });

@@ -5,7 +5,8 @@ import PostForm from '~/components/PostForm';
 import PostCard from '~/components/PostCard';
 import { LOAD_POSTS_REQUEST } from '~/reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '~/reducers/user';
-
+import wrapper from '~/store/configureStore';
+import { END } from 'redux-saga';
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -13,21 +14,19 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
     useSelector((state) => state.post);
 
-  console.log(mainPosts);
-
   useEffect(() => {
     if (retweetError) {
       alert(retweetError);
     }
   }, [retweetError]);
 
-  useEffect(() => {
-    dispatch({
-      type: LOAD_MY_INFO_REQUEST,
-    });
-
-    dispatch({ type: LOAD_POSTS_REQUEST });
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: LOAD_MY_INFO_REQUEST,
+  //   });
+  //
+  //   dispatch({ type: LOAD_POSTS_REQUEST });
+  // }, []);
 
   useEffect(() => {
     function onScroll() {
@@ -57,5 +56,19 @@ const Home = () => {
     </AppLayout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    //context 안에 store가 있음
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
+    context.store.dispatch({
+      type: LOAD_POSTS_REQUEST,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  },
+);
 
 export default Home;

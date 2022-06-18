@@ -3,7 +3,6 @@ import AppLayout from '../components/AppLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import PostForm from '~/components/PostForm';
 import PostCard from '~/components/PostCard';
-import { CellMeasurerCache } from 'react-virtualized';
 import { LOAD_POSTS_REQUEST } from '~/reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '~/reducers/user';
 
@@ -11,9 +10,16 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePost, loadPostsLoading } = useSelector(
-    (state) => state.post,
-  );
+  const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
+    useSelector((state) => state.post);
+
+  console.log(mainPosts);
+
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
 
   useEffect(() => {
     dispatch({
@@ -29,8 +35,9 @@ const Home = () => {
         window.scrollY + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
       ) {
-        if (hasMorePost && !loadPostsLoading) {
-          dispatch({ type: LOAD_POSTS_REQUEST });
+        if (hasMorePosts && !loadPostsLoading) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
+          dispatch({ type: LOAD_POSTS_REQUEST, lastId });
         }
       }
     }
@@ -39,7 +46,7 @@ const Home = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [hasMorePost, loadPostsLoading, mainPosts]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
   return (
     <AppLayout>

@@ -58,7 +58,7 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
-  const linked = post.Likers.find((v) => v.id === id);
+  const linked = post.Likers?.find((v) => v.id === id);
 
   const onRetweet = useCallback(() => {
     if (!id) {

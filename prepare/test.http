@@ -5,3 +5,6 @@ Content-Type: application/json
   "id": 13,
   "content": 3
 }
+
+### GET
+GET http://localhost:3000/post/100

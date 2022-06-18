@@ -38,7 +38,7 @@ const Post = () => {
               : 'http://localhost:3000/favicon.ico'
           }
         />
-        <meta property="og:url" content={`https://nodebird.com/post/${id}`} />
+        <meta property="og:url" content={`http://localhost:3000/post/${id}`} />
       </Head>
       <PostCard post={singlePost} />
     </AppLayout>

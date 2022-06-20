@@ -14,8 +14,12 @@ import Head from 'next/head';
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
-
   const { singlePost } = useSelector((state) => state.post);
+
+  // if (router.isFallback && !singlePost) {
+  //   return <div>loading...</div>;
+  // }
+
   return (
     <AppLayout>
       <Head>
@@ -45,6 +49,18 @@ const Post = () => {
   );
 };
 
+//미리 만들어놔야 할 것들 불러오기
+// export async function getStaticPaths() {
+//   // 제한을 둬야함 (할만한 것들만)
+//   return {
+//     paths: [
+//       { params: { id: '93' } },
+//       { params: { id: '94' } },
+//       { params: { id: '95' } },
+//     ],
+//     fallback: true,
+//   };
+// }
 export const getServerSideProps = wrapper.getServerSideProps(
   async (context) => {
     const cookie = context.req ? context.req.headers.cookie : '';

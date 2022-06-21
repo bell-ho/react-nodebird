@@ -41,6 +41,40 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/followers", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } }); //나를 찾고
+    if (!user) {
+      res.status(403).send("존재 하지 않는 사용자 입니다.");
+    }
+    const followers = await user.getFollowers({
+      attributes: ["id", "nickname"],
+      limit: parseInt(req.query.limit, 10),
+    });
+    res.status(200).json(followers);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.get("/followings", isLoggedIn, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      res.status(403).send("존재 하지 않는 사용자 입니다.");
+    }
+    const followings = await user.getFollowings({
+      attributes: ["id", "nickname"],
+      limit: parseInt(req.query.limit, 10),
+    });
+    res.status(200).json(followings);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 router.get("/:userId", async (req, res, next) => {
   try {
     const fullUserWithoutPassword = await User.findOne({
@@ -231,34 +265,6 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
       { where: { id: req.user.id } }
     );
     res.status(200).json({ nickname: req.body.nickname });
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-});
-
-router.get("/followers", isLoggedIn, async (req, res, next) => {
-  try {
-    const user = await User.findOne({ where: { id: req.user.id } }); //나를 찾고
-    if (!user) {
-      res.status(403).send("존재 하지 않는 사용자 입니다.");
-    }
-    const followers = await user.getFollowers();
-    res.status(200).json(followers);
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-});
-
-router.get("/followings", isLoggedIn, async (req, res, next) => {
-  try {
-    const user = await User.findOne({ where: { id: req.user.id } });
-    if (!user) {
-      res.status(403).send("존재 하지 않는 사용자 입니다.");
-    }
-    const followings = await user.getFollowings();
-    res.status(200).json(followings);
   } catch (e) {
     console.error(e);
     next(e);

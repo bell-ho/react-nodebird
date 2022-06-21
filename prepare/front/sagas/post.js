@@ -35,6 +35,12 @@ import {
   LOAD_POST_REQUEST,
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
+  LOAD_HASHTAG_POSTS_FAILURE,
+  LOAD_HASHTAG_POSTS_REQUEST,
+  LOAD_USER_POSTS_REQUEST,
+  LOAD_HASHTAG_POSTS_SUCCESS,
+  LOAD_USER_POSTS_SUCCESS,
+  LOAD_USER_POSTS_FAILURE,
 } from '~/reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '~/reducers/user';
 import axios from 'axios';
@@ -221,6 +227,46 @@ function* retweet(action) {
   }
 }
 
+function loadUserPostsAPI(data, lastId) {
+  return axios.post(`/user/${data}/posts?lastId=${lastId || 0}`);
+}
+
+function* loadUserPosts(action) {
+  try {
+    const result = yield call(loadUserPostsAPI, action.data, action.lastId);
+    yield put({
+      type: LOAD_USER_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_USER_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadHashtagPostsAPI(data, lastId) {
+  return axios.post(`/hashtag/${data}?lastId=${lastId || 0}`);
+}
+
+function* loadHashtagPosts(action) {
+  try {
+    const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
+    yield put({
+      type: LOAD_HASHTAG_POSTS_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_HASHTAG_POSTS_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchLikePost() {
   yield takeLatest(LIKE_POST_REQUEST, likePost);
 }
@@ -256,6 +302,13 @@ function* watchUploadImages() {
 function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
+function* watchLoadHashtagPosts() {
+  yield throttle(3000, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+}
+function* watchLoadUserPosts() {
+  yield throttle(3000, LOAD_USER_POSTS_REQUEST, loadUserPosts);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchRetweet),
@@ -263,6 +316,8 @@ export default function* postSaga() {
     fork(watchLikePost),
     fork(watchUnLikePost),
     fork(watchLoadPosts),
+    fork(watchLoadUserPosts),
+    fork(watchLoadHashtagPosts),
     fork(watchLoadPost),
     fork(watchAddPost),
     fork(watchRemovePost),

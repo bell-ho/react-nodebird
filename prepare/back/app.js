@@ -4,6 +4,7 @@ const cors = require("cors");
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
+const hashtagRouter = require("./routes/hashtag");
 const db = require("./models");
 const passportConfig = require("./passport");
 const session = require("express-session");
@@ -53,6 +54,7 @@ app.get("/", (req, res) => {
 app.use("/posts", postsRouter);
 app.use("/post", postRouter);
 app.use("/user", userRouter);
+app.use("/hashtag", hashtagRouter);
 
 //error 미들웨어는 마지막에
 app.use((err, req, res, next) => {});

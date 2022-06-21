@@ -1,4 +1,3 @@
-// post/[id].js
 import React from 'react';
 import { useRouter } from 'next/router';
 import wrapper from '~/store/configureStore';

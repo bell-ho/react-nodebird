@@ -122,6 +122,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       type: LOAD_USER_POSTS_REQUEST,
       data: context.params.id,
     });
+
     context.store.dispatch({
       type: LOAD_USER_REQUEST,
       data: context.params.id,

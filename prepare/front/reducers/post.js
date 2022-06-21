@@ -1,5 +1,4 @@
 import produce from 'immer';
-import faker from 'faker';
 
 export const initialState = {
   mainPosts: [],

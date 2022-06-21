@@ -72,14 +72,6 @@ const AppLayout = ({ children }) => {
             ),
             key: '/search',
           },
-          // {
-          //   label: (
-          //     <Link href="/signup">
-          //       <a>회원가입</a>
-          //     </Link>
-          //   ),
-          //   key: '/signup',
-          // },
         ]}
       />
       <Row gutter={8}>

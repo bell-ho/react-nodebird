@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Avatar, Button, Card, Comment, List, Popover } from 'antd';
+import { Avatar, Button, Card, Comment, List, Popover, Tooltip } from 'antd';
 import {
   EllipsisOutlined,
   HeartOutlined,
@@ -146,7 +146,7 @@ const PostCard = ({ post }) => {
             }
           >
             <div style={{ float: 'right' }}>
-              {moment(post.createdAt).format('YYYY.MM.DD')}
+              {moment(post.createdAt).startOf('m').fromNow()}
             </div>
             <Card.Meta
               avatar={
@@ -169,7 +169,7 @@ const PostCard = ({ post }) => {
         ) : (
           <>
             <div style={{ float: 'right' }}>
-              {moment(post.createdAt).format('YYYY.MM.DD')}
+              {moment(post.createdAt).startOf('m').fromNow()}
             </div>
             <Card.Meta
               avatar={
@@ -211,7 +211,21 @@ const PostCard = ({ post }) => {
                         </a>
                       </Link>
                     }
-                    content={item.content}
+                    content={item.content.split(/(#[^\s#]+)/g).map((v, i) => {
+                      if (v.match(/(#[^\s#]+)/g)) {
+                        return (
+                          <Link href={`/hashtag/${v.slice(1)}`} key={i}>
+                            <a>{v}</a>
+                          </Link>
+                        );
+                      }
+                      return v;
+                    })}
+                    datetime={
+                      <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                        <span>{moment(item.createdAt).fromNow()}</span>
+                      </Tooltip>
+                    }
                   />
                 </li>
               );

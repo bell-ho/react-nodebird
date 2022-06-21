@@ -102,6 +102,14 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
       PostId: parseInt(req.params.postId, 10),
       UserId: req.user.id,
     });
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    if (hashtags) {
+      await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({ where: { name: tag.slice(1).toLowerCase() } })
+        )
+      );
+    }
     const fullComment = await Comment.findOne({
       where: { id: comment.id },
       include: [

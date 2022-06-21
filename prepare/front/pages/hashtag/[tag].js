@@ -3,7 +3,7 @@ import AppLayout from '~/components/AppLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '~/components/PostCard';
 import { LOAD_HASHTAG_POSTS_REQUEST } from '~/reducers/post';
-import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '~/reducers/user';
+import { LOAD_MY_INFO_REQUEST } from '~/reducers/user';
 import wrapper from '~/store/configureStore';
 import { END } from 'redux-saga';
 import axios from 'axios';

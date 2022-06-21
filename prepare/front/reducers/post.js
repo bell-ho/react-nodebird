@@ -169,6 +169,7 @@ const reducer = (state = initialState, action) => {
         draft.unlikePostLoading = false;
         draft.unlikePostError = action.error;
         break;
+
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;
         draft.likePostDone = false;

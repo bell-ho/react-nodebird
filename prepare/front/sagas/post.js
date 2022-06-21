@@ -1,12 +1,4 @@
-import {
-  all,
-  delay,
-  fork,
-  put,
-  takeLatest,
-  call,
-  throttle,
-} from 'redux-saga/effects';
+import { all, fork, put, takeLatest, call, throttle } from 'redux-saga/effects';
 import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
@@ -313,6 +305,7 @@ function* watchUploadImages() {
 function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
+
 export default function* postSaga() {
   yield all([
     fork(watchRetweet),
@@ -322,6 +315,8 @@ export default function* postSaga() {
     fork(watchLoadUserPosts),
     fork(watchLoadHashtagPosts),
     fork(watchLoadPosts),
+    fork(watchLoadUserPosts),
+    fork(watchLoadHashtagPosts),
     fork(watchLoadPost),
     fork(watchAddPost),
     fork(watchRemovePost),

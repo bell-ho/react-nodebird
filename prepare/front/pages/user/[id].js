@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import AppLayout from '~/components/AppLayout';
 import { useDispatch, useSelector } from 'react-redux';
-import PostForm from '~/components/PostForm';
 import PostCard from '~/components/PostCard';
-import { LOAD_POSTS_REQUEST, LOAD_USER_POSTS_REQUEST } from '~/reducers/post';
+import { LOAD_USER_POSTS_REQUEST } from '~/reducers/post';
 import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '~/reducers/user';
 import wrapper from '~/store/configureStore';
 import { END } from 'redux-saga';
@@ -19,8 +18,9 @@ const User = () => {
   const { id } = router.query;
 
   const { userInfo } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
-    useSelector((state) => state.post);
+  const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
+    (state) => state.post,
+  );
 
   useEffect(() => {
     function onScroll() {
@@ -122,7 +122,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       type: LOAD_USER_POSTS_REQUEST,
       data: context.params.id,
     });
-
     context.store.dispatch({
       type: LOAD_USER_REQUEST,
       data: context.params.id,

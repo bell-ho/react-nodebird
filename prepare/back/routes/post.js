@@ -253,6 +253,35 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.patch("/:postId", isLoggedIn, async (req, res, next) => {
+  try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    await Post.update(
+      { content: req.body.content },
+      {
+        where: { id: req.params.postId, UserId: req.user.id },
+      }
+    );
+    const post = await Post.findOne({ where: { id: req.params.postId } });
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({ where: { name: tag.slice(1).toLowerCase() } })
+        )
+      );
+      await post.setHashtags(result.map((v) => v[0]));
+    }
+    // saga로 이동
+    res.json({
+      PostId: parseInt(req.params.postId, 10),
+      content: req.body.content,
+    });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 router.patch(`/:postId/like`, isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({

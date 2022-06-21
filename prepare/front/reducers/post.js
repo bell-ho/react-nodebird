@@ -31,6 +31,10 @@ export const initialState = {
   addPostDone: false,
   addPostError: null,
 
+  updatePostLoading: false,
+  updatePostDone: false,
+  updatePostError: null,
+
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
@@ -76,6 +80,10 @@ export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
+export const UPDATE_POST_REQUEST = 'UPDATE_POST_REQUEST';
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
+export const UPDATE_POST_FAILURE = 'UPDATE_POST_FAILURE';
+
 export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
@@ -89,25 +97,6 @@ export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
-
-const dummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    // id: shortId.generate(),
-    nickname: 'bell-ho',
-  },
-  Images: [],
-  Comments: [],
-});
-const dummyComment = (data) => ({
-  // id: shortId.generate(),
-  content: data,
-  User: {
-    // id: shortId.generate(),
-    nickname: 'bell-ho',
-  },
-});
 
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
@@ -168,15 +157,15 @@ const reducer = (state = initialState, action) => {
         draft.unlikePostLoading = false;
         draft.unlikePostError = action.error;
         break;
-
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;
         draft.likePostDone = false;
         draft.likePostError = null;
         break;
       case LIKE_POST_SUCCESS: {
-        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-        post.Likers.push({ id: action.data.UserId });
+        draft.mainPosts
+          .find((v) => v.id === action.data.PostId)
+          .Likers.push({ id: action.data.UserId });
         draft.likePostLoading = false;
         draft.likePostDone = true;
         break;
@@ -234,6 +223,21 @@ const reducer = (state = initialState, action) => {
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
         draft.addPostError = action.error;
+        break;
+      case UPDATE_POST_REQUEST:
+        draft.updatePostLoading = true;
+        draft.updatePostDone = false;
+        draft.updatePostError = null;
+        break;
+      case UPDATE_POST_SUCCESS:
+        draft.mainPosts.find((v) => v.id === action.data.PostId).content =
+          action.data.content;
+        draft.updatePostLoading = false;
+        draft.updatePostDone = true;
+        break;
+      case UPDATE_POST_FAILURE:
+        draft.updatePostLoading = false;
+        draft.updatePostError = action.error;
         break;
       case REMOVE_POST_REQUEST:
         draft.removePostLoading = true;

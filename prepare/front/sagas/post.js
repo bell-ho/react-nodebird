@@ -30,6 +30,9 @@ import {
   UNLIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
+  UPDATE_POST_FAILURE,
+  UPDATE_POST_REQUEST,
+  UPDATE_POST_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
   UPLOAD_IMAGES_REQUEST,
   UPLOAD_IMAGES_SUCCESS,
@@ -202,6 +205,26 @@ function* removePost(action) {
   }
 }
 
+function updatePostAPI(data) {
+  return axios.patch(`/post/${data.PostId}`, data);
+}
+
+function* updatePost(action) {
+  try {
+    const result = yield call(updatePostAPI, action.data);
+    yield put({
+      type: UPDATE_POST_SUCCESS,
+      data: result.data, //<= reducer로 이동
+    });
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: UPDATE_POST_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function addCommentAPI(data) {
   return axios.post(`/post/${data.postId}/comment`, data);
 }
@@ -294,6 +317,10 @@ function* watchRemovePost() {
   yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
+function* watchUpdatePost() {
+  yield takeLatest(UPDATE_POST_REQUEST, updatePost);
+}
+
 function* watchCommentPost() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
@@ -318,6 +345,7 @@ export default function* postSaga() {
     fork(watchLoadPost),
     fork(watchAddPost),
     fork(watchRemovePost),
+    fork(watchUpdatePost),
     fork(watchCommentPost),
   ]);
 }

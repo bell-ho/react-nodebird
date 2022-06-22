@@ -27,7 +27,7 @@ passportConfig();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "nodebird.com"],
+    origin: ["http://localhost:3000", "nodebird.com", "http://54.180.86.190"],
     credentials: true,
   })
 );

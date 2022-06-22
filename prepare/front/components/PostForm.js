@@ -8,6 +8,7 @@ import {
   ADD_POST_REQUEST,
 } from '~/reducers/post';
 import useInput from '~/hook/useInput';
+import { backUrl } from '~/config/config';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -92,7 +93,7 @@ const PostForm = () => {
         {imagePaths.map((value, i) => (
           <div key={value} style={{ display: 'inline-block' }}>
             <img
-              src={`http://localhost:3065/${value}`}
+              src={`${backUrl}/${value}`}
               style={{ width: '200px' }}
               alt={value}
             />

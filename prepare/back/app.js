@@ -13,6 +13,8 @@ const passport = require("passport");
 const dotenv = require("dotenv");
 const path = require("path");
 const morgan = require("morgan");
+const hpp = require("hpp");
+const helmet = require("helmet");
 
 dotenv.config();
 db.sequelize
@@ -25,10 +27,17 @@ passportConfig();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "nodebird.com"],
     credentials: true,
   })
 );
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+  app.use(hpp());
+  app.use(helmet());
+} else {
+  app.use(morgan("dev"));
+}
 app.use(morgan("dev"));
 
 app.use("/", express.static(path.join(__dirname, "uploads")));
@@ -59,6 +68,6 @@ app.use("/hashtag", hashtagRouter);
 //error 미들웨어는 마지막에
 app.use((err, req, res, next) => {});
 
-app.listen(80, () => {
+app.listen(3060, () => {
   console.log("서버 실행 중");
 });

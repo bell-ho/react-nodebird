@@ -30,7 +30,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "supercola.co.kr",
-      "http://13.124.19.139",
+      "http://supercola.co.kr",
     ],
     credentials: true,
   })
@@ -55,6 +55,11 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      domain: process.env.NODE_ENV === "production" && ".supercola.co.kr",
+    },
   })
 );
 app.use(passport.initialize());

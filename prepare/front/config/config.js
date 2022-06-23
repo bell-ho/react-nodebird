@@ -1,1 +1,1 @@
-export const backUrl = 'http://3.37.19.53';
+export const backUrl = 'http://api.supercola.co.kr';

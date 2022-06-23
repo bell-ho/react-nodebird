@@ -27,11 +27,7 @@ passportConfig();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "supercola.co.kr",
-      "http://supercola.co.kr",
-    ],
+    origin: ["http://localhost:3000", "http://supercola.co.kr"],
     credentials: true,
   })
 );

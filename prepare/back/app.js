@@ -25,13 +25,6 @@ db.sequelize
   .catch(console.error);
 passportConfig();
 
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://supercola.co.kr"],
-    credentials: true,
-  })
-);
-
 if (process.env.NODE_ENV === "production") {
   app.use(morgan("combined"));
   app.use(hpp());
@@ -51,10 +44,8 @@ if (process.env.NODE_ENV === "production") {
     })
   );
 }
-app.use(morgan("dev"));
 
 app.use("/", express.static(path.join(__dirname, "uploads")));
-
 // req body를 가져오기 위한
 app.use(express.json()); // front 에서 json 형태로
 app.use(express.urlencoded({ extended: true })); // form submit 방식으로 할 때
@@ -84,8 +75,8 @@ app.use("/user", userRouter);
 app.use("/hashtag", hashtagRouter);
 
 //error 미들웨어는 마지막에
-app.use((err, req, res, next) => {});
+// app.use((err, req, res, next) => {});
 
-app.listen(3060, () => {
+app.listen(3065, () => {
   console.log("서버 실행 중");
 });

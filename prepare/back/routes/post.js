@@ -6,6 +6,9 @@ const { isLoggedIn } = require("./middlewares");
 const multer = require("multer");
 const fs = require("fs");
 
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
+
 try {
   fs.accessSync("uploads");
 } catch (e) {
@@ -13,16 +16,17 @@ try {
   fs.mkdirSync("uploads");
 }
 
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: "ap-northeast-2",
+});
 const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, "uploads");
-    },
-    filename(req, file, done) {
-      // ex) testFile.png
-      const ext = path.extname(file.originalname); //확장자 추출 => .png
-      const basename = path.basename(file.originalname, ext); // testFile
-      done(null, basename + "_" + new Date().getTime() + ext); // 시간초를 파일이름에 더해줌
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "supercola-s3",
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
     },
   }),
   limits: { fileSize: 20 * 1024 * 1024 }, // 용량제한 20MB
@@ -173,8 +177,6 @@ router.get("/:postId", async (req, res, next) => {
         },
       ],
     });
-
-    console.log(fullPost);
 
     res.status(200).json(fullPost);
   } catch (error) {
@@ -336,7 +338,7 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
 
 router.post(`/images`, isLoggedIn, upload.array("image"), (req, res, next) => {
   try {
-    res.json(req.files.map((v) => v.filename));
+    res.json(req.files.map((v) => v.location));
   } catch (e) {
     console.error(e);
     next(e);

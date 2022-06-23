@@ -27,7 +27,11 @@ passportConfig();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "nodebird.com", "http://54.180.86.190"],
+    origin: [
+      "http://localhost:3000",
+      "supercola.co.kr",
+      "http://13.124.19.139",
+    ],
     credentials: true,
   })
 );

@@ -2,13 +2,11 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addPost,
-  UPLOAD_IMAGES_REQUEST,
-  REMOVE_IMAGE,
   ADD_POST_REQUEST,
+  REMOVE_IMAGE,
+  UPLOAD_IMAGES_REQUEST,
 } from '~/reducers/post';
 import useInput from '~/hook/useInput';
-import { backUrl } from '~/config/config';
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -92,11 +90,7 @@ const PostForm = () => {
       <div>
         {imagePaths.map((value, i) => (
           <div key={value} style={{ display: 'inline-block' }}>
-            <img
-              src={`${backUrl}/${value}`}
-              style={{ width: '200px' }}
-              alt={value}
-            />
+            <img src={value} style={{ width: '200px' }} alt={value} />
             <div>
               <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>

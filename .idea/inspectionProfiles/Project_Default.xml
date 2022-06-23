@@ -28,8 +28,6 @@
           <option value="http://cxf.apache.org/schemas/" />
           <option value="http://primefaces.org/ui" />
           <option value="http://tiles.apache.org/" />
-          <option value="http://supercola.co.kr" />
-          <option value="http://api.supercola.co.kr" />
         </list>
       </option>
     </inspection_tool>

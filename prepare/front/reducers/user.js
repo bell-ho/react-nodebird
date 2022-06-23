@@ -96,23 +96,6 @@ export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
-const dummyUser = (data) => ({
-  ...data,
-  nickname: 'bell-ho',
-  // id: shortId.generate(),
-  Posts: [{ id: 1 }],
-  followings: [
-    { name: '1', nickname: '22' },
-    { name: '1', nickname: '22' },
-    { name: '1', nickname: '22' },
-  ],
-  Followers: [
-    { name: '1', nickname: '22' },
-    { name: '1', nickname: '22' },
-    { name: '1', nickname: '22' },
-  ],
-});
-
 export const loginRequestAction = (data) => {
   return {
     type: LOG_IN_REQUEST,

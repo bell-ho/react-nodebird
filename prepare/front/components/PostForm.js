@@ -40,8 +40,11 @@ const PostForm = () => {
 
   const onChangeImages = useCallback((e) => {
     const imageFormData = new FormData();
+    const reg = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
     [].forEach.call(e.target.files, (f) => {
-      imageFormData.append('image', f);
+      if (f.name.match(reg)) {
+        imageFormData.append('image', f);
+      }
     });
     dispatch({
       type: UPLOAD_IMAGES_REQUEST,
@@ -74,6 +77,7 @@ const PostForm = () => {
           name="image"
           multiple
           hidden
+          accept="image/*"
           ref={imageInput}
           onChange={onChangeImages}
         />

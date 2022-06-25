@@ -294,15 +294,15 @@ function* watchUnLikePost() {
 }
 
 function* watchLoadPosts() {
-  yield throttle(3000, LOAD_POSTS_REQUEST, loadPosts);
+  yield throttle(500, LOAD_POSTS_REQUEST, loadPosts);
 }
 
 function* watchLoadUserPosts() {
-  yield throttle(3000, LOAD_USER_POSTS_REQUEST, loadUserPosts);
+  yield throttle(500, LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 
 function* watchLoadHashtagPosts() {
-  yield throttle(3000, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+  yield throttle(500, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 
 function* watchLoadPost() {

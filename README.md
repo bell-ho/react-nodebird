@@ -88,3 +88,6 @@ SSR 적용시
 getStaticProps : 언제 접속해도 데이터가 바뀔 일이 없을때 사용 (쓰기 까다로움)
 
 getServerSideProps : 접속할 때 마다 접속한 상황에 따라 화면이 바뀌여야 할 때 사용
+
+## 0624
+ec2 변경

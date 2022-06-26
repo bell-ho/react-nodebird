@@ -3,6 +3,7 @@ import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   ADD_POST_REQUEST,
+  LOAD_POSTS_REQUEST,
   REMOVE_IMAGE,
   UPLOAD_IMAGES_REQUEST,
 } from '~/reducers/post';

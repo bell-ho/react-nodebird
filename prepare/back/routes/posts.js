@@ -3,6 +3,7 @@ const { Post, Image, User, Comment } = require("../models");
 const router = express.Router();
 const { Op } = require("sequelize");
 const { Sequelize } = require("sequelize");
+
 router.get("/", async (req, res, next) => {
   try {
     const where = {};

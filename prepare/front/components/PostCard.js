@@ -47,11 +47,8 @@ const PostCard = ({ post }) => {
   }, [id]);
 
   const onToggleComment = useCallback(() => {
-    if (!id) {
-      return alert('로그인이 필요합니다.');
-    }
     setCommentFormOpen((prev) => !prev);
-  }, [id]);
+  }, []);
 
   const onRemovePost = useCallback(() => {
     if (!id) {
@@ -62,8 +59,6 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, [id]);
-
-  const linked = post.Likers?.find((v) => v.id === id);
 
   const onRetweet = useCallback(() => {
     if (!id) {
@@ -89,11 +84,12 @@ const PostCard = ({ post }) => {
     },
     [post],
   );
+  const linked = post.Likers?.find((v) => v.id === id);
 
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
-        cover={post.Images[0] && <PostImages images={post.Images} />}
+        cover={post?.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" onClick={onRetweet} />,
           linked ? (

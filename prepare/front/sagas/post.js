@@ -170,9 +170,15 @@ function addPostAPI(data) {
 function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data);
+    const loadPosts = yield call(loadPostsAPI, 0);
+    // console.log(loadPosts);
+    // yield put({
+    //   type: ADD_POST_SUCCESS,
+    //   data: result.data,
+    // });
     yield put({
       type: ADD_POST_SUCCESS,
-      data: result.data,
+      data: loadPosts.data,
     });
     yield put({ type: ADD_POST_TO_ME, data: result.data.id });
   } catch (e) {

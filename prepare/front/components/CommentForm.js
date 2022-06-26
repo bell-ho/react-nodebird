@@ -8,27 +8,20 @@ import useInput from '../hook/useInput';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { addCommentDone, addCommentLoading } = useSelector(
-    (state) => state.post,
-  );
-  const [loading, setLoading] = useState(false);
+  const { addCommentDone } = useSelector((state) => state.post);
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
   useEffect(() => {
-    if (!loading) {
+    if (addCommentDone) {
       setCommentText('');
     }
-  }, [loading]);
+  }, [addCommentDone]);
 
   const onSubmitComment = useCallback(() => {
-    setLoading(true);
     dispatch({
       type: ADD_COMMENT_REQUEST,
       data: { content: commentText, postId: post.id, userId: me?.id },
     });
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
   }, [commentText, me?.id]);
 
   return (
@@ -43,7 +36,6 @@ const CommentForm = ({ post }) => {
           type="primary"
           htmlType="submit"
           style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
-          loading={loading}
         >
           삐약
         </Button>

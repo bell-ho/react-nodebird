@@ -11,7 +11,7 @@ export const Overlay = styled.div`
 `;
 
 export const Header = styled.header`
-  header: 44px;
+  height: 44px;
   background: white;
   position: relative;
   padding: 0;
@@ -23,6 +23,15 @@ export const Header = styled.header`
     color: #333;
     line-height: 44px;
   }
+`;
+
+export const CloseBtn = styled(CloseOutlined)`
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15px;
+  line-height: 14px;
+  cursor: pointer;
 `;
 
 export const SlickWrapper = styled.div`
@@ -60,17 +69,7 @@ export const Global = createGlobalStyle`
   .slick-slide {
     display: inline-block;
   }
-
   .ant-card-cover {
     transform: none !important;
   }
-`;
-
-export const CloseBtn = styled(CloseOutlined)`
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 15px;
-  line-height: 14px;
-  cursor: pointer;
 `;

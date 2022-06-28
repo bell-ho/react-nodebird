@@ -27,8 +27,8 @@ const LoginForm = () => {
   }, [logInError]);
 
   const dispatch = useDispatch();
-  const [email, onChangeEmail] = useInput('jj@jj.jj');
-  const [password, onChangePassword] = useInput('jj');
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
     dispatch(loginRequestAction({ email, password }));

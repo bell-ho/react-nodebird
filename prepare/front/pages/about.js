@@ -18,7 +18,7 @@ const About = () => {
         <Card
           actions={[
             <div key="twit">
-              짹짹
+              글
               <br />
               {userInfo.Posts}
             </div>,

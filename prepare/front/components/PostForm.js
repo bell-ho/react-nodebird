@@ -76,6 +76,7 @@ const PostForm = () => {
       <Input.TextArea
         value={text}
         onChange={onChangeText}
+        // showCount
         maxLength={140}
         placeholder="입력"
       />
@@ -96,7 +97,7 @@ const PostForm = () => {
           loading={addPostLoading}
           htmlType="submit"
         >
-          짹짹
+          등록
         </Button>
       </div>
       <div>

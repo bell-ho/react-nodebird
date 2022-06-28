@@ -37,9 +37,10 @@ const CommentForm = ({ post }) => {
       <Form.Item style={{ position: 'relative', margin: 0 }}>
         <Input.Group compact>
           <Input
+            showCount
             value={commentText}
+            maxLength={50}
             onChange={onChangeCommentText}
-            rows={1}
             style={{
               width: 'calc(100% - 59px)',
             }}

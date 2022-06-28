@@ -18,7 +18,7 @@ const UserProfile = () => {
         <div key="twit">
           <Link href={`/user/${me.id}`}>
             <a>
-              짹짹
+              글
               <br />
               {me.Posts.length}
             </a>

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { createElement, useCallback, useState } from 'react';
 import { Avatar, Button, Card, Comment, List, Popover, Tooltip } from 'antd';
 import {
   EllipsisOutlined,
@@ -6,6 +6,9 @@ import {
   LikeTwoTone,
   MessageOutlined,
   RetweetOutlined,
+  DislikeFilled,
+  DislikeOutlined,
+  LikeFilled,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -87,6 +90,22 @@ const PostCard = ({ post }) => {
     [post],
   );
   const linked = post.Likers?.find((v) => v.id === id);
+
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
+  const [action, setAction] = useState(null);
+
+  const like = () => {
+    setLikes(1);
+    setDislikes(0);
+    setAction('liked');
+  };
+
+  const dislike = () => {
+    setLikes(0);
+    setDislikes(1);
+    setAction('disliked');
+  };
 
   return (
     <div style={{ marginBottom: 20 }}>
@@ -254,6 +273,26 @@ const PostCard = ({ post }) => {
                             <span>{moment(item.createdAt).fromNow()}</span>
                           </Tooltip>
                         }
+                        actions={[
+                          <Tooltip key="comment-basic-like" title="Like">
+                            <span onClick={like}>
+                              {createElement(
+                                action === 'liked' ? LikeFilled : LikeOutlined,
+                              )}
+                              <span className="comment-action">{likes}</span>
+                            </span>
+                          </Tooltip>,
+                          <Tooltip key="comment-basic-dislike" title="Dislike">
+                            <span onClick={dislike}>
+                              {React.createElement(
+                                action === 'disliked'
+                                  ? DislikeFilled
+                                  : DislikeOutlined,
+                              )}
+                              <span className="comment-action">{dislikes}</span>
+                            </span>
+                          </Tooltip>,
+                        ]}
                       />
                     </li>
                   );

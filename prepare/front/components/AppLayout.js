@@ -85,13 +85,13 @@ const AppLayout = ({ children }) => {
           {children}
         </Col>
         <Col xs={24} md={6}>
-          <a
-            href="https://github.com/bell-ho"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            bell-ho
-          </a>
+          {/*<a*/}
+          {/*  href="https://github.com/bell-ho"*/}
+          {/*  target="_blank"*/}
+          {/*  rel="noreferrer noopener"*/}
+          {/*>*/}
+          {/*  bell-ho*/}
+          {/*</a>*/}
         </Col>
       </Row>
     </div>

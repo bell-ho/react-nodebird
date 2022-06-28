@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import wrapper from '~/store/configureStore';
 import axios from 'axios';
 import { LOAD_MY_INFO_REQUEST } from '~/reducers/user';
-import { LOAD_POST_REQUEST, LOAD_POSTS_REQUEST } from '~/reducers/post';
+import { LOAD_POST_REQUEST } from '~/reducers/post';
 import { END } from 'redux-saga';
 import AppLayout from '~/components/AppLayout';
 import PostCard from '~/components/PostCard';
@@ -38,10 +38,13 @@ const Post = () => {
           content={
             singlePost.Images[0]
               ? singlePost.Images[0].src
-              : 'http://localhost:3000/favicon.ico'
+              : 'https://supercola.co.kr/favicon.ico'
           }
         />
-        <meta property="og:url" content={`http://localhost:3000/post/${id}`} />
+        <meta
+          property="og:url"
+          content={`https://supercola.co.kr/post/${id}`}
+        />
       </Head>
       <PostCard post={singlePost} />
     </AppLayout>

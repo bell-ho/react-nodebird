@@ -39,12 +39,12 @@ const SignUp = () => {
     }
   }, [signUpError]);
 
-  const [email, onChangeEmail] = useInput('d@d.c');
-  const [password, onChangePassword] = useInput('a');
-  const [nickname, onChangeNickname] = useInput('a');
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
   const [passwordError, setPasswordError] = useState(false);
 
-  const [passwordCheck, setPasswordCheck] = useState('a');
+  const [passwordCheck, setPasswordCheck] = useState('');
   const onChangePasswordCheck = useCallback(
     (e) => {
       setPasswordCheck(e.target.value);
@@ -128,7 +128,7 @@ const SignUp = () => {
         </div>
         <div>
           <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
-            동의합니다.
+            혐오감이나 공포감을 주는 사진은 처벌받을 수 있습니다.
           </Checkbox>
           {termError && <ErrorMessage>동의를 확인하십시오.</ErrorMessage>}
         </div>

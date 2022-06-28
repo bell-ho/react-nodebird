@@ -272,8 +272,10 @@ const reducer = (state = initialState, action) => {
         // const mainPosts = [...state.mainPosts]; // 원래 포스트들을 가져오고
         // mainPosts[postIndex] = post; // 원래 포스트에서 해당 포스트를 교체한다
 
-        const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-        post.Comments.unshift(action.data);
+        // const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+        // post.Comments.unshift(action.data);
+        const post = draft.mainPosts.find((v) => v.id === action.data.id);
+        post.Comments = action.data.Comments;
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;

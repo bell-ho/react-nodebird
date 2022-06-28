@@ -1,32 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Avatar, Button, Card, Comment, List, Popover, Tooltip } from 'antd';
 import {
-  Avatar,
-  Button,
-  Card,
-  Comment,
-  List,
-  Popover,
-  Space,
-  Tooltip,
-} from 'antd';
-import Icon, {
   EllipsisOutlined,
   LikeOutlined,
+  LikeTwoTone,
   MessageOutlined,
   RetweetOutlined,
-  HeartTwoTone,
-  LikeTwoTone,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import PostImages from '~/components/PostImages';
 import CommentForm from '~/components/CommentForm';
 import PostCardContent from '~/components/PostCardContent';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   LIKE_POST_REQUEST,
   REMOVE_POST_REQUEST,
-  UNLIKE_POST_REQUEST,
   RETWEET_REQUEST,
+  UNLIKE_POST_REQUEST,
   UPDATE_POST_REQUEST,
 } from '~/reducers/post';
 import FollowButton from '~/components/FollowButton';
@@ -34,13 +25,6 @@ import Link from 'next/link';
 import moment from 'moment';
 
 moment.locale('ko');
-
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -214,49 +198,71 @@ const PostCard = ({ post }) => {
         )}
       </Card>
       {commentFormOpen && (
-        <div>
-          <CommentForm post={post} />
-          <List
-            header={`${post.Comments.length}개의 댓글`}
-            itemLayout="horizontal"
-            dataSource={post?.Comments}
-            renderItem={(item) => {
-              return (
-                <li>
-                  <Comment
-                    author={item?.User?.nickname}
-                    avatar={
-                      <Link href={`/user/${item.User.id}`} prefetch={false}>
-                        <a>
-                          <Avatar>{item?.User?.nickname[0]}</Avatar>
-                        </a>
-                      </Link>
-                    }
-                    content={item.content.split(/(#[^\s#]+)/g).map((v, i) => {
-                      if (v.match(/(#[^\s#]+)/g)) {
-                        return (
-                          <Link
-                            href={`/hashtag/${v.slice(1)}`}
-                            prefetch={false}
-                            key={i}
-                          >
-                            <a>{v}</a>
-                          </Link>
-                        );
-                      }
-                      return v;
-                    })}
-                    datetime={
-                      <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
-                        <span>{moment(item.createdAt).fromNow()}</span>
-                      </Tooltip>
-                    }
-                  />
-                </li>
-              );
+        <>
+          <div
+            id="scrollableDiv"
+            style={{
+              height: 200,
+              overflow: 'auto',
+              padding: '0 16px',
+              border: '1px solid rgba(140, 140, 140, 0.35)',
             }}
-          />
-        </div>
+          >
+            <InfiniteScroll
+              dataLength={post?.Comments.length}
+              // next={loadMoreData}
+              hasMore={post?.Comments.length < 10}
+              // loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+              scrollableTarget="scrollableDiv"
+            >
+              <List
+                header={`${post.Comments.length}개의 댓글`}
+                itemLayout="horizontal"
+                dataSource={post?.Comments}
+                renderItem={(item) => {
+                  return (
+                    <li>
+                      <Comment
+                        author={item?.User?.nickname}
+                        avatar={
+                          <Link href={`/user/${item.User.id}`} prefetch={false}>
+                            <a>
+                              <Avatar>{item?.User?.nickname[0]}</Avatar>
+                            </a>
+                          </Link>
+                        }
+                        content={item.content
+                          .split(/(#[^\s#]+)/g)
+                          .map((v, i) => {
+                            if (v.match(/(#[^\s#]+)/g)) {
+                              return (
+                                <Link
+                                  href={`/hashtag/${v.slice(1)}`}
+                                  prefetch={false}
+                                  key={i}
+                                >
+                                  <a>{v}</a>
+                                </Link>
+                              );
+                            }
+                            return v;
+                          })}
+                        datetime={
+                          <Tooltip
+                            title={moment().format('YYYY-MM-DD HH:mm:ss')}
+                          >
+                            <span>{moment(item.createdAt).fromNow()}</span>
+                          </Tooltip>
+                        }
+                      />
+                    </li>
+                  );
+                }}
+              />
+            </InfiniteScroll>
+          </div>
+          <CommentForm post={post} />
+        </>
       )}
     </div>
   );

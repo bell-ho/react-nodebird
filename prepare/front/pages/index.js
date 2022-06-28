@@ -41,8 +41,6 @@ const Home = () => {
     };
   }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
-  // console.log(mainPosts);
-
   return (
     <AppLayout>
       {me && <PostForm />}

@@ -8,7 +8,9 @@ import useInput from '../hook/useInput';
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { addCommentDone } = useSelector((state) => state.post);
+  const { addCommentDone, addCommentError } = useSelector(
+    (state) => state.post,
+  );
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
   useEffect(() => {
@@ -24,21 +26,28 @@ const CommentForm = ({ post }) => {
     });
   }, [commentText, me?.id]);
 
+  useEffect(() => {
+    if (addCommentError) {
+      alert('도배 방지');
+    }
+  }, [addCommentError]);
+
   return (
     <Form onFinish={onSubmitComment}>
       <Form.Item style={{ position: 'relative', margin: 0 }}>
-        <Input.TextArea
-          value={commentText}
-          onChange={onChangeCommentText}
-          rows={4}
-        />
-        <Button
-          type="primary"
-          htmlType="submit"
-          style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1 }}
-        >
-          삐약
-        </Button>
+        <Input.Group compact>
+          <Input
+            value={commentText}
+            onChange={onChangeCommentText}
+            rows={1}
+            style={{
+              width: 'calc(100% - 59px)',
+            }}
+          />
+          <Button htmlType="submit" type="primary">
+            등록
+          </Button>
+        </Input.Group>
       </Form.Item>
     </Form>
   );

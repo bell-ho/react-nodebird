@@ -106,6 +106,15 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
 
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
   try {
+    const prevComment = await Comment.findOne({
+      where: { PostId: req.params.postId, UserId: req.user.id },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (prevComment && Date.now() - prevComment.createdAt <= 2000) {
+      return res.status(403).send("도배 금지");
+    }
+
     const post = await Post.findOne({
       where: { id: req.params.postId },
     });
@@ -151,6 +160,7 @@ router.get("/:postId", async (req, res, next) => {
     }
     const fullPost = await Post.findOne({
       where: { id: post.id },
+      order: [[Comment, "createdAt", "DESC"]],
       include: [
         {
           model: User,

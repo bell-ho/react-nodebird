@@ -238,9 +238,14 @@ function addCommentAPI(data) {
 function* addComment(action) {
   try {
     const result = yield call(addCommentAPI, action.data);
+    const loadPost = yield call(loadPostAPI, action.data.postId);
+    // yield put({
+    //   type: ADD_COMMENT_SUCCESS,
+    //   data: result.data,
+    // });
     yield put({
       type: ADD_COMMENT_SUCCESS,
-      data: result.data,
+      data: loadPost.data,
     });
   } catch (e) {
     console.error(e);

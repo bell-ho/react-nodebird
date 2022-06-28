@@ -34,11 +34,23 @@ const upload = multer({
 
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   try {
+    const prevPost = await Post.findOne({
+      where: { UserId: req.user.id },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (new Date().getTime() - prevPost.createdAt <= 3000) {
+      console.log(new Date().getTime() - prevPost.createdAt);
+      return res.status(403).send("도배 금지");
+    }
+
     const hashtags = req.body.content.match(/#[^\s#]+/g);
+
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+
     if (hashtags) {
       const result = await Promise.all(
         hashtags.map((tag) =>

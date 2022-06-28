@@ -11,7 +11,7 @@ import useInput from '~/hook/useInput';
 
 const PostForm = () => {
   const dispatch = useDispatch();
-  const { imagePaths, addPostDone, addPostLoading } = useSelector(
+  const { imagePaths, addPostDone, addPostLoading, addPostError } = useSelector(
     (state) => state.post,
   );
   const [text, onChangeText, setText] = useInput('');
@@ -33,6 +33,12 @@ const PostForm = () => {
       setText('');
     }
   }, [addPostDone]);
+
+  useEffect(() => {
+    if (addPostError) {
+      alert(addPostError);
+    }
+  }, [addPostError]);
 
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {

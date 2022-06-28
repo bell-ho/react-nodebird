@@ -58,7 +58,7 @@ const PostCard = ({ post }) => {
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
-  }, [id]);
+  }, [id, post.id]);
 
   const onRetweet = useCallback(() => {
     if (!id) {

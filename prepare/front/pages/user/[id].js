@@ -63,11 +63,11 @@ const User = () => {
           />
           <meta
             property="og:image"
-            content="http://localhost:3000/favicon.ico"
+            content="https://supercola.co.kr/favicon.ico"
           />
           <meta
             property="og:url"
-            content={`http://localhost:3000/user/${id}`}
+            content={`https://supercola.co.kr/user/${id}`}
           />
         </Head>
       )}

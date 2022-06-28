@@ -1,11 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Avatar, Button, Card, Comment, List, Popover, Tooltip } from 'antd';
 import {
+  Avatar,
+  Button,
+  Card,
+  Comment,
+  List,
+  Popover,
+  Space,
+  Tooltip,
+} from 'antd';
+import Icon, {
   EllipsisOutlined,
-  HeartOutlined,
-  HeartTwoTone,
+  LikeOutlined,
   MessageOutlined,
   RetweetOutlined,
+  HeartTwoTone,
+  LikeTwoTone,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -24,6 +34,14 @@ import Link from 'next/link';
 import moment from 'moment';
 
 moment.locale('ko');
+
+const IconText = ({ icon, text }) => (
+  <Space>
+    {React.createElement(icon)}
+    {text}
+  </Space>
+);
+
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const [commentFormOpen, setCommentFormOpen] = useState(false);
@@ -37,14 +55,14 @@ const PostCard = ({ post }) => {
       return alert('로그인이 필요합니다.');
     }
     dispatch({ type: LIKE_POST_REQUEST, data: post.id });
-  }, [id]);
+  }, [id, post.id]);
 
   const onUnLike = useCallback(() => {
     if (!id) {
       return alert('로그인이 필요합니다.');
     }
     dispatch({ type: UNLIKE_POST_REQUEST, data: post.id });
-  }, [id]);
+  }, [id, post.id]);
 
   const onToggleComment = useCallback(() => {
     setCommentFormOpen((prev) => !prev);
@@ -93,15 +111,20 @@ const PostCard = ({ post }) => {
         actions={[
           <RetweetOutlined key="retweet" onClick={onRetweet} />,
           linked ? (
-            <HeartTwoTone
-              twoToneColor="#eb2f96"
-              onClick={onUnLike}
-              key="heart"
-            />
+            <div onClick={onUnLike}>
+              <LikeTwoTone key="heart" style={{ marginRight: 3 }} />
+              {`${post.Likers.length}`}
+            </div>
           ) : (
-            <HeartOutlined onClick={onLike} key="heart" />
+            <div onClick={onLike}>
+              <LikeOutlined key="heart" style={{ marginRight: 3 }} />
+              {`${post.Likers.length}`}
+            </div>
           ),
-          <MessageOutlined key="comment" onClick={onToggleComment} />,
+          <div onClick={onToggleComment}>
+            <MessageOutlined key="comment" style={{ marginRight: 3 }} />
+            {`${post.Comments.length}`}
+          </div>,
           <Popover
             key="more"
             content={
@@ -177,12 +200,14 @@ const PostCard = ({ post }) => {
               }
               title={post.User.nickname}
               description={
-                <PostCardContent
-                  editMode={editMode}
-                  onChangePost={onChangePost}
-                  onCancelUpdate={onCancelUpdate}
-                  postData={post.content}
-                />
+                <>
+                  <PostCardContent
+                    editMode={editMode}
+                    onChangePost={onChangePost}
+                    onCancelUpdate={onCancelUpdate}
+                    postData={post.content}
+                  />
+                </>
               }
             />
           </>

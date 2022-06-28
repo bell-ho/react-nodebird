@@ -39,8 +39,7 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
       order: [["createdAt", "DESC"]],
     });
 
-    if (new Date().getTime() - prevPost.createdAt <= 3000) {
-      console.log(new Date().getTime() - prevPost.createdAt);
+    if (prevPost && Date.now() - prevPost.createdAt <= 3000) {
       return res.status(403).send("도배 금지");
     }
 

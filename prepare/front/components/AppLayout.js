@@ -26,6 +26,9 @@ const Global = createGlobalStyle`
   .ant-col:last-child {
     padding-right: 0 !important;
   }
+  .ant-comment-inner {
+    padding: 5px 0;
+  }
 `;
 
 const AppLayout = ({ children }) => {

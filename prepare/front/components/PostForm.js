@@ -35,6 +35,7 @@ const PostForm = () => {
   }, [addPostDone]);
 
   useEffect(() => {
+    //도배 방지
     if (addPostError) {
       alert(addPostError);
     }

@@ -100,12 +100,12 @@ const PostForm = () => {
           등록
         </Button>
       </div>
-      <div>
+      <div style={{ maxHeight: 200, overflow: 'auto' }}>
         {imagePaths.map((v, i) => (
           <div key={v} style={{ display: 'inline-block' }}>
             <img
               src={v.replace(/\/thumb\//, '/original/')}
-              style={{ width: '200px' }}
+              style={{ width: '190px', padding: 2 }}
               alt={v}
             />
             <div>

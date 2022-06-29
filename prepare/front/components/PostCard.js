@@ -17,6 +17,7 @@ import CommentForm from '~/components/CommentForm';
 import PostCardContent from '~/components/PostCardContent';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {
+  LIKE_COMMENT_REQUEST,
   LIKE_POST_REQUEST,
   REMOVE_POST_REQUEST,
   RETWEET_REQUEST,
@@ -26,6 +27,7 @@ import {
 import FollowButton from '~/components/FollowButton';
 import Link from 'next/link';
 import moment from 'moment';
+import PostImagesSlick from '~/components/PostImagesSlick';
 
 moment.locale('ko');
 
@@ -112,7 +114,8 @@ const PostCard = ({ post }) => {
     <div style={{ marginBottom: 20 }}>
       <Card
         cover={
-          !post?.hide && post?.Images[0] && <PostImages images={post.Images} />
+          !post?.hide &&
+          post?.Images[0] && <PostImagesSlick images={post.Images} />
         }
         actions={[
           <RetweetOutlined key="retweet" onClick={onRetweet} />,
@@ -247,7 +250,7 @@ const PostCard = ({ post }) => {
               scrollableTarget="scrollableDiv"
             >
               <List
-                header={`${post.Comments.length}개의 댓글`}
+                // header={`${post.Comments.length}개의 댓글`}
                 itemLayout="horizontal"
                 dataSource={post?.Comments}
                 renderItem={(item) => {
@@ -287,7 +290,7 @@ const PostCard = ({ post }) => {
                         }
                         // actions={[
                         //   <Tooltip key="comment-basic-like" title="Like">
-                        //     <span onClick={like}>
+                        //     <span onClick={() => onCommentLike(item.id)}>
                         //       {createElement(
                         //         action === 'liked' ? LikeFilled : LikeOutlined,
                         //       )}
@@ -304,7 +307,7 @@ const PostCard = ({ post }) => {
                         //       <span className="comment-action">{dislikes}</span>
                         //     </span>
                         //   </Tooltip>,
-                        // ]}
+                        //]}
                       />
                     </li>
                   );

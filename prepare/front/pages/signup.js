@@ -113,7 +113,7 @@ const SignUp = () => {
           />
         </div>
         <div>
-          <label htmlFor="user-password-check">비밀번호채크</label>
+          <label htmlFor="user-password-check">비밀번호 재입력</label>
           <br />
           <Input
             name="user-password-check"

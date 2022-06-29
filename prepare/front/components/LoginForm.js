@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Row } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '~/hook/useInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginRequestAction } from '~/reducers/user';
+import GoogleLoginBtn from '~/components/GoogleLoginBtn';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -68,6 +69,11 @@ const LoginForm = () => {
           </a>
         </Link>
       </ButtonWrapper>
+      <Form.Item>
+        <Row justify="center" wrap={false}>
+          <GoogleLoginBtn />
+        </Row>
+      </Form.Item>
     </FormWrapper>
   );
 };

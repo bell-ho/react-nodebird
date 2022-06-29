@@ -9,12 +9,16 @@ import wrapper from '~/store/configureStore';
 import { END } from 'redux-saga';
 import axios from 'axios';
 
+import { useInView } from 'react-intersection-observer';
+
 const Home = () => {
   const dispatch = useDispatch();
 
   const { me } = useSelector((state) => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
     useSelector((state) => state.post);
+
+  const [ref, inView] = useInView();
 
   useEffect(() => {
     if (retweetError) {
@@ -23,30 +27,23 @@ const Home = () => {
   }, [retweetError]);
 
   useEffect(() => {
-    function onScroll() {
-      if (
-        window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 300
-      ) {
-        if (hasMorePosts && !loadPostsLoading) {
-          const lastId = mainPosts[mainPosts.length - 1]?.id;
-          dispatch({ type: LOAD_POSTS_REQUEST, lastId });
-        }
-      }
+    if (inView && hasMorePosts && !loadPostsLoading) {
+      const lastId = mainPosts[mainPosts.length - 1]?.id;
+      dispatch({
+        type: LOAD_POSTS_REQUEST,
+        lastId,
+      });
     }
-
-    window.addEventListener('scroll', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-    };
-  }, [hasMorePosts, loadPostsLoading, mainPosts]);
+  }, [inView, hasMorePosts, loadPostsLoading, mainPosts]);
 
   return (
     <AppLayout>
       {me && <PostForm />}
-      {mainPosts.map((post, i) => (
-        <PostCard key={post.id} post={post} />
-      ))}
+      {me && mainPosts.map((post, i) => <PostCard key={post.id} post={post} />)}
+      <div
+        ref={hasMorePosts && !loadPostsLoading ? ref : undefined}
+        style={{ height: 10 }}
+      />
     </AppLayout>
   );
 };

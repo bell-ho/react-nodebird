@@ -69,8 +69,9 @@ const PostCard = ({ post }) => {
     if (!id) {
       return alert('로그인이 필요합니다.');
     }
+
     dispatch({ type: RETWEET_REQUEST, data: post.id });
-  }, [id]);
+  }, [id, post.id]);
 
   const onClickUpdate = useCallback(() => {
     setEditMode(true);
@@ -110,7 +111,9 @@ const PostCard = ({ post }) => {
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
-        cover={post?.Images[0] && <PostImages images={post.Images} />}
+        cover={
+          !post?.hide && post?.Images[0] && <PostImages images={post.Images} />
+        }
         actions={[
           <RetweetOutlined key="retweet" onClick={onRetweet} />,
           linked ? (
@@ -131,24 +134,26 @@ const PostCard = ({ post }) => {
           <Popover
             key="more"
             content={
-              <Button.Group>
-                {id && post.User.id === id ? (
-                  <>
-                    {!post.RetweetId && (
-                      <Button onClick={onClickUpdate}>수정</Button>
-                    )}
-                    <Button
-                      type="danger"
-                      loading={removePostLoading}
-                      onClick={onRemovePost}
-                    >
-                      삭제
-                    </Button>
-                  </>
-                ) : (
-                  <Button>신고</Button>
-                )}
-              </Button.Group>
+              !post?.hide && (
+                <Button.Group>
+                  {id && post.User.id === id ? (
+                    <>
+                      {!post.RetweetId && (
+                        <Button onClick={onClickUpdate}>수정</Button>
+                      )}
+                      <Button
+                        type="danger"
+                        loading={removePostLoading}
+                        onClick={onRemovePost}
+                      >
+                        삭제
+                      </Button>
+                    </>
+                  ) : (
+                    <Button>신고</Button>
+                  )}
+                </Button.Group>
+              )
             }
           >
             <EllipsisOutlined />
@@ -159,9 +164,10 @@ const PostCard = ({ post }) => {
         }
         extra={id && <FollowButton post={post} />}
       >
-        {post.RetweetId && post.Retweet ? (
+        {post.RetweetId && post.Retweet ? ( //리트윗 게시물
           <Card
             cover={
+              !post?.Retweet.hide &&
               post.Retweet.Images[0] && (
                 <PostImages images={post.Retweet.Images} />
               )
@@ -183,7 +189,11 @@ const PostCard = ({ post }) => {
                 <PostCardContent
                   onChangePost={onChangePost}
                   onCancelUpdate={onCancelUpdate}
-                  postData={post.Retweet.content}
+                  postData={
+                    post?.Retweet.hide
+                      ? '삭제된 게시글 입니다.'
+                      : post.Retweet.content
+                  }
                 />
               }
             />
@@ -208,7 +218,9 @@ const PostCard = ({ post }) => {
                     editMode={editMode}
                     onChangePost={onChangePost}
                     onCancelUpdate={onCancelUpdate}
-                    postData={post.content}
+                    postData={
+                      post?.hide ? '삭제된 게시글 입니다' : post.content
+                    }
                   />
                 </>
               }
@@ -273,26 +285,26 @@ const PostCard = ({ post }) => {
                             <span>{moment(item.createdAt).fromNow()}</span>
                           </Tooltip>
                         }
-                        actions={[
-                          <Tooltip key="comment-basic-like" title="Like">
-                            <span onClick={like}>
-                              {createElement(
-                                action === 'liked' ? LikeFilled : LikeOutlined,
-                              )}
-                              <span className="comment-action">{likes}</span>
-                            </span>
-                          </Tooltip>,
-                          <Tooltip key="comment-basic-dislike" title="Dislike">
-                            <span onClick={dislike}>
-                              {React.createElement(
-                                action === 'disliked'
-                                  ? DislikeFilled
-                                  : DislikeOutlined,
-                              )}
-                              <span className="comment-action">{dislikes}</span>
-                            </span>
-                          </Tooltip>,
-                        ]}
+                        // actions={[
+                        //   <Tooltip key="comment-basic-like" title="Like">
+                        //     <span onClick={like}>
+                        //       {createElement(
+                        //         action === 'liked' ? LikeFilled : LikeOutlined,
+                        //       )}
+                        //       <span className="comment-action">{likes}</span>
+                        //     </span>
+                        //   </Tooltip>,
+                        //   <Tooltip key="comment-basic-dislike" title="Dislike">
+                        //     <span onClick={dislike}>
+                        //       {React.createElement(
+                        //         action === 'disliked'
+                        //           ? DislikeFilled
+                        //           : DislikeOutlined,
+                        //       )}
+                        //       <span className="comment-action">{dislikes}</span>
+                        //     </span>
+                        //   </Tooltip>,
+                        // ]}
                       />
                     </li>
                   );
@@ -312,6 +324,7 @@ PostCard.propTypes = {
     id: PropTypes.number,
     User: PropTypes.object,
     content: PropTypes.string,
+    hide: PropTypes.bool,
     createdAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),

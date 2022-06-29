@@ -9,6 +9,10 @@ module.exports = class Post extends Model {
           type: DataTypes.TEXT,
           allowNull: false,
         },
+        hide: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
         // RetweetId
       },
       {

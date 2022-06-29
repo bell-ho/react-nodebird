@@ -20,6 +20,10 @@ const CommentForm = ({ post }) => {
   }, [addCommentDone]);
 
   const onSubmitComment = useCallback(() => {
+    if (!commentText || commentText === '') {
+      alert('문자를 입력해주세요.');
+      return;
+    }
     dispatch({
       type: ADD_COMMENT_REQUEST,
       data: { content: commentText, postId: post.id, userId: me?.id },

@@ -57,7 +57,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       domain: process.env.NODE_ENV === "production" && ".supercola.co.kr",
     },
   })
@@ -75,7 +75,19 @@ app.use("/user", userRouter);
 app.use("/hashtag", hashtagRouter);
 
 //error 미들웨어는 마지막에
-// app.use((err, req, res, next) => {});
+app.use((req, res, next) => {
+  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+  error.status = 404;
+  next(error);
+});
+app.use((err, req, res, next) => {
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
+  res.status(err.status || 500);
+  //   res.render("error");
+  //express에서 view를 담당하는 html이 없어서
+  //Error: No default engine was specified and no extension was provided
+});
 
 app.listen(3065, () => {
   console.log("서버 실행 중");

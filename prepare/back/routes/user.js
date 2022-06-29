@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const { Op } = require("sequelize");
-
+const frontUrl = require("../config/frontUrl");
 router.get("/", async (req, res, next) => {
   try {
     if (req.user) {
@@ -171,6 +171,25 @@ router.get("/:userId/posts", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get("/auth/google", function (req, res, next) {
+  passport.authenticate("google", { scope: ["profile", "email"] })(
+    req,
+    res,
+    next
+  );
+});
+
+router.get(
+  "/auth/google/callback",
+  isNotLoggedIn,
+  passport.authenticate("google", {
+    failureRedirect: "/",
+  }),
+  async (req, res, next) => {
+    return res.status(200).redirect(frontUrl);
+  }
+);
 
 //로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {

@@ -8,6 +8,7 @@ const fs = require("fs");
 
 const multerS3 = require("multer-s3");
 const AWS = require("aws-sdk");
+const { Op } = require("sequelize");
 
 try {
   fs.accessSync("uploads");
@@ -221,6 +222,12 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
       return res.status(403).send("존재하지 않는 게시글입니다.");
     }
     if (
+      (!post?.Retweet && post?.hide) ||
+      (post?.Retweet && post?.Retweet.hide)
+    ) {
+      return res.status(403).send("존재하지 않는 게시글입니다.");
+    }
+    if (
       req.user.id === post.UserId || //자기 게시글을 리트윗하는경우
       (post.Retweet && post.Retweet.UserId === req.user.id) // 남이 리트윗한 내 게시글을 또 리트윗 하려는 경우
     ) {
@@ -236,7 +243,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
     const retweet = await Post.create({
       UserId: req.user.id,
       RetweetId: retweetTargetId,
-      content: "retweet",
+      content: "retweet 내용",
     });
     const retweetWithPrevPost = await Post.findOne({
       where: { id: retweet.id },
@@ -347,9 +354,16 @@ router.delete(`/:postId/unlike`, isLoggedIn, async (req, res, next) => {
 
 router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   try {
-    await Post.destroy({
-      where: { id: req.params.postId, UserId: req.user.id },
-    });
+    // await Post.destroy({where: {id: req.params.postId, UserId: req.user.id}});
+    await Post.update(
+      { hide: true },
+      {
+        where: {
+          id: req.params.postId,
+          UserId: req.user.id,
+        },
+      }
+    );
     res.json({ PostId: parseInt(req.params.postId, 10) });
   } catch (e) {
     console.error(e);

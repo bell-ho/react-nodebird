@@ -78,7 +78,7 @@ const PostForm = () => {
         onChange={onChangeText}
         // showCount
         maxLength={140}
-        placeholder="입력"
+        placeholder="혐짤 업로드 절대 금지"
       />
       <div>
         <input

@@ -16,7 +16,7 @@ module.exports = class User extends Model {
         },
         password: {
           type: DataTypes.STRING(100),
-          allowNull: true, // 필수
+          allowNull: true,
         },
         provider: {
           type: DataTypes.STRING(10),

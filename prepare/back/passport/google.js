@@ -1,7 +1,7 @@
 const passport = require("passport");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
-
+const callbackUrl = require("../config/callbackUrl");
 //구글 로그인 전략
 dotenv.config();
 const { User } = require("../models");
@@ -13,7 +13,7 @@ module.exports = () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/user/auth/google/callback",
+        callbackURL: callbackUrl,
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("profile", profile);

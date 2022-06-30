@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import { GoogleLoginButton } from 'react-social-login-buttons';
 import { useRouter } from 'next/router';
-import { backUrl, frontUrl } from '~/config/config';
+import { backUrl } from '~/config/config';
 import { Tooltip } from 'antd';
+
 const GoogleLoginBtn = () => {
   const router = useRouter();
   const onClickGoogleLogin = useCallback(() => {

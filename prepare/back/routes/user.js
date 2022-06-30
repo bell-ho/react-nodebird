@@ -186,7 +186,7 @@ router.get(
     failureRedirect: "/",
   }),
   (req, res, next) => {
-    res.redirect("/");
+    res.redirect(frontUrl);
   }
 );
 

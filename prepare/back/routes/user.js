@@ -182,12 +182,11 @@ router.get("/auth/google", function (req, res, next) {
 
 router.get(
   "/auth/google/callback",
-  isNotLoggedIn,
   passport.authenticate("google", {
     failureRedirect: "/",
   }),
   async (req, res, next) => {
-    return res.status(200).redirect(frontUrl);
+    return res.status(200).redirect("/");
   }
 );
 

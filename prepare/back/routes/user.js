@@ -185,8 +185,8 @@ router.get(
   passport.authenticate("google", {
     failureRedirect: "/",
   }),
-  async (req, res, next) => {
-    return res.status(200).redirect("/");
+  (req, res, next) => {
+    res.redirect("/");
   }
 );
 

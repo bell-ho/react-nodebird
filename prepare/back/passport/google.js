@@ -5,7 +5,7 @@ const callbackUrl = require("../config/callbackUrl");
 //구글 로그인 전략
 dotenv.config();
 const { User } = require("../models");
-const GoogleStrategy = require("passport-google-oauth").OAuthStrategy;
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 module.exports = () => {
   passport.use(

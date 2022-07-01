@@ -89,3 +89,5 @@ getStaticProps : 언제 접속해도 데이터가 바뀔 일이 없을때 사용
 
 getServerSideProps : 접속할 때 마다 접속한 상황에 따라 화면이 바뀌여야 할 때 사용
 
+# 0702
+saga 코드 react-query로 변경 진행

@@ -1,12 +1,25 @@
-const passport = require("passport");
+const express = require("express");
+const app = express();
 const dotenv = require("dotenv");
-const bcrypt = require("bcrypt");
-
 const callbackUrl = require("../config/callbackUrl");
-//구글 로그인 전략
+
+const session = require("express-session");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 dotenv.config();
 const { User } = require("../models");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 module.exports = () => {
   passport.use(
@@ -14,7 +27,8 @@ module.exports = () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/user/auth/google/callback",
+        callbackURL: callbackUrl,
+        // callbackURL: "http://localhost:3065/user/auth/google/callback/",
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("profile", profile);

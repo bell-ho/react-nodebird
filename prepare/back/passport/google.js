@@ -5,7 +5,7 @@ const callbackUrl = require("../config/callbackUrl");
 
 const session = require("express-session");
 const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 const MySQLStore = require("express-mysql-session")(session);
 
@@ -42,7 +42,7 @@ module.exports = () => {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: callbackUrl,
-        passReqToCallback: true,
+        // passReqToCallback: true,
         // callbackURL: "http://localhost:3065/user/auth/google/callback/",
       },
       async (accessToken, refreshToken, profile, done) => {

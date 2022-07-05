@@ -15,6 +15,7 @@ const path = require("path");
 const morgan = require("morgan");
 const hpp = require("hpp");
 const helmet = require("helmet");
+const cookieSession = require("cookie-session");
 
 dotenv.config();
 db.sequelize

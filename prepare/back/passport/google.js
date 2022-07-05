@@ -55,7 +55,7 @@ module.exports = () => {
             return done(null, exUser);
           } else {
             const newUser = await User.create({
-              email: profile?.email[0].value,
+              email: profile?.emails[0].value,
               nickname: profile.displayName,
               snsId: profile.id,
               provider: "google",

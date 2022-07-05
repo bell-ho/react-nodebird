@@ -181,7 +181,7 @@ router.get("/:userId/posts", async (req, res, next) => {
 // });
 
 router.get(
-  "/auth/google",
+  "/auth/google/",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
@@ -196,7 +196,7 @@ router.get(
 // );
 
 router.get(
-  "/auth/google/callback",
+  "/auth/google/callback/",
   passport.authenticate("google", {
     failureRedirect: "/",
     successRedirect: "/",

@@ -172,21 +172,34 @@ router.get("/:userId/posts", async (req, res, next) => {
   }
 });
 
-router.get("/auth/google", function (req, res, next) {
-  passport.authenticate("google", { scope: ["profile", "email"] })(
-    req,
-    res,
-    next
-  );
-});
+// router.get("/auth/google", function (req, res, next) {
+//   passport.authenticate("google", { scope: ["profile", "email"] })(
+//     req,
+//     res,
+//     next
+//   );
+// });
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+// router.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", {
+//     failureRedirect: "/",
+//   }),
+//   (req, res, next) => {
+//     res.redirect("/");
+//   }
+// );
 
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/",
-  }),
-  (req, res, next) => {
-    res.redirect(frontUrl);
+  passport.authenticate("google", { failureRedirect: "/" }), //? 그리고 passport 로그인 전략에 의해 googleStrategy로 가서 구글계정 정보와 DB를 비교해서 회원가입시키거나 로그인 처리하게 한다.
+  (req, res) => {
+    res.redirect("/");
   }
 );
 

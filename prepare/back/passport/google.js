@@ -6,7 +6,7 @@ const callbackUrl = require("../config/callbackUrl");
 //구글 로그인 전략
 dotenv.config();
 const { User } = require("../models");
-const GoogleStrategy = require("passport-google-oauth2").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 module.exports = () => {
   passport.use(
@@ -14,7 +14,7 @@ module.exports = () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: callbackUrl,
+        callbackURL: "/user/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("profile", profile);
@@ -26,7 +26,7 @@ module.exports = () => {
             return done(null, exUser);
           } else {
             const newUser = await User.create({
-              email: profile.emails[0].value,
+              email: profile?.email[0].value,
               nickname: profile.displayName,
               snsId: profile.id,
               provider: "google",

@@ -196,11 +196,13 @@ router.get(
 // );
 
 router.get(
-  "/auth/google/callback/",
+  "/auth/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/",
-    successRedirect: "/",
-  })
+  }),
+  (req, res, next) => {
+    res.redirect(frontUrl);
+  }
 );
 
 //로그인
